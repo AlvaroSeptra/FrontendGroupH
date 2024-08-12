@@ -1,5 +1,6 @@
-import React from 'react';
-import LoginRegistrationForm from '../components/registrationform';
+import React from "react";
+import LoginForm from "../../../components/loginform";
+import Link from "next/link";
 
 const LoginPage: React.FC = () => {
   return (
@@ -7,10 +8,10 @@ const LoginPage: React.FC = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Register Here
+            Sign in to your account
           </h2>
         </div>
-        <RegistrationForm />
+        <LoginForm />
       </div>
     </div>
   );
