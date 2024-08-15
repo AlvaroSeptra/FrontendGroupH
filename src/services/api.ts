@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { User, Product, Cart, CartItem, Order, Voucher } from '../types';
 
-const API_URL = 'http://localhost:5000/api'; // Sesuaikan dengan URL backend
+const API_URL = 'http://localhost:3000/api'; // Sesuaikan dengan URL backend
 
 const api = axios.create({
   baseURL: API_URL,
