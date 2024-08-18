@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface User {
   userId: number;
@@ -15,6 +16,8 @@ interface User {
 }
 
 const RegistrationForm: React.FC = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const formik = useFormik<User>({
     initialValues: {
       userId: 0,
@@ -60,7 +63,7 @@ const RegistrationForm: React.FC = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.username}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         {formik.touched.username && formik.errors.username ? (
           <div className="text-red-500 text-sm mt-1">
@@ -69,7 +72,7 @@ const RegistrationForm: React.FC = () => {
         ) : null}
       </div>
 
-      <div>
+      <div className="relative">
         <label
           htmlFor="password"
           className="block text-sm font-medium text-gray-700"
@@ -79,12 +82,18 @@ const RegistrationForm: React.FC = () => {
         <input
           id="password"
           name="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.password}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
         />
+        <span
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </span>
         {formik.touched.password && formik.errors.password ? (
           <div className="text-red-500 text-sm mt-1">
             {formik.errors.password}
@@ -106,10 +115,12 @@ const RegistrationForm: React.FC = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.email}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         {formik.touched.email && formik.errors.email ? (
-          <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
+          <div className="text-red-500 text-sm mt-1">
+            {formik.errors.email}
+          </div>
         ) : null}
       </div>
 
@@ -127,7 +138,7 @@ const RegistrationForm: React.FC = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.location}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         {formik.touched.location && formik.errors.location ? (
           <div className="text-red-500 text-sm mt-1">
@@ -171,11 +182,11 @@ const RegistrationForm: React.FC = () => {
       </div>
       <div className="mt-4">
         <div className="text-center text-sm text-gray-500">
-          <Link href="/login" className="hover:underline pointer">
+          <Link href="/login" className="hover:underline">
             already have an account?
           </Link>
           <div className="my-2"></div>
-          <Link href="/" className="hover:underline pointer">
+          <Link href="/" className="hover:underline">
             Go Back to Home
           </Link>
         </div>
