@@ -6,7 +6,7 @@ export interface User {
   email: string;
   password: string;
   location: string;
-  userType: 'CUSTOMER' | 'SELLER';
+  userType: "CUSTOMER" | "SELLER";
 }
 
 export interface Product {
@@ -17,7 +17,7 @@ export interface Product {
   price: number;
   quantity: number;
   category: string;
-  ecoFriendly: boolean; 
+  ecoFriendly: boolean;
 }
 
 export interface CartItem {
