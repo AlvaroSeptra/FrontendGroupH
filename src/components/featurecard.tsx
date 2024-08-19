@@ -45,7 +45,7 @@ export function FeatureCard() {
                                 height="400" 
                                 src="https://grostore-wp.themetags.com/wp-content/uploads/2023/03/product-1-500x400.png" 
                                 className="img-fluid rounded-lg" 
-                                alt="Product 1" 
+                                alt="Organic Peas" 
                             />
                         </a>
                         <div className="product-btns product-overlay position-absolute start-0 top-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-2">
@@ -68,7 +68,7 @@ export function FeatureCard() {
                             <span className="count flex-shrink-0 text-gray-500 text-sm">(1 review)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
-                            Three Carrot Vegetables
+                                Organic Peas
                         </a>
                         <div className="pricing mt-2">
                             <h6 className="price text-danger text-xl font-bold">
@@ -91,7 +91,7 @@ export function FeatureCard() {
                                 height="400" 
                                 src="https://grostore-wp.themetags.com/wp-content/uploads/2023/03/product-2-500x400.png" 
                                 className="img-fluid rounded-lg" 
-                                alt="Product 2" 
+                                alt="Avocado" 
                             />
                         </a>
                         <div className="product-btns product-overlay position-absolute start-0 top-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-2">
@@ -114,7 +114,7 @@ export function FeatureCard() {
                             <span className="count flex-shrink-0 text-gray-500 text-sm">(5 reviews)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
-                            Organic Apple Pack
+                            Avocado
                         </a>
                         <div className="pricing mt-2">
                             <h6 className="price text-danger text-xl font-bold">
@@ -137,7 +137,7 @@ export function FeatureCard() {
                                 height="400" 
                                 src="https://grostore-wp.themetags.com/wp-content/uploads/2023/03/product-3-500x400.png" 
                                 className="img-fluid rounded-lg" 
-                                alt="Product 3" 
+                                alt="Premium Mixed Nuts" 
                             />
                         </a>
                         <div className="product-btns product-overlay position-absolute start-0 top-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-2">
@@ -160,7 +160,7 @@ export function FeatureCard() {
                             <span className="count flex-shrink-0 text-gray-500 text-sm">(3 reviews)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
-                            Premium Mixed Nuts
+                            Pistachio Nuts
                         </a>
                         <div className="pricing mt-2">
                             <h6 className="price text-danger text-xl font-bold">
@@ -183,7 +183,7 @@ export function FeatureCard() {
                                 height="400" 
                                 src="https://grostore-wp.themetags.com/wp-content/uploads/2023/03/product-4-500x400.png" 
                                 className="img-fluid rounded-lg" 
-                                alt="Product 4" 
+                                alt="Tomato" 
                             />
                         </a>
                         <div className="product-btns product-overlay position-absolute start-0 top-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-2">
@@ -206,7 +206,7 @@ export function FeatureCard() {
                             <span className="count flex-shrink-0 text-gray-500 text-sm">(2 reviews)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
-                            Organic Green Tea
+                            Tomato
                         </a>
                         <div className="pricing mt-2">
                             <h6 className="price text-danger text-xl font-bold">
