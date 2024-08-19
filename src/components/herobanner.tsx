@@ -21,7 +21,7 @@ const HeroBanner = () => {
     {
       image: "/client-2.png",
       name: "Marchel Lee",
-      feedback: "The best organic food I’ve ever had!",
+      feedback: "The best organic food I've ever had!",
       rating: 4,
     },
     {

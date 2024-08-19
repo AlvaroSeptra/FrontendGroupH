@@ -1,6 +1,6 @@
-import HeroBanner from "@/components/herobanner";
+import HeroBanner from "@/components/HeroBanner";
 import Image from "next/image";
-import FeatureCard from "@/components/featurecard";
+import FeatureCard from "@/components/FeatureCard";
 
 export default function Home() {
   return (

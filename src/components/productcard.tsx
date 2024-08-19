@@ -1,85 +1,86 @@
-"use client";
+// src/components/ProductCard.tsx
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import styles from './ProductCard.module.css';
 
-interface Product {
+interface ProductCardProps {
   id: number;
-  imageUrl: string;
+  image: string;
+  category: string;
   title: string;
-  price: number;
   rating: number;
-  reviewsCount: number;
+  price: string;
+  oldPrice?: string;
+  discount?: string;
 }
 
-const ProductCard: React.FC = () => {
-  const [product, setProduct] = useState<Product | null>(null);
-
-  useEffect(() => {
-    // This is where you'll fetch product data from your API once it's available.
-    // For now, we're using hardcoded data.
-    const fetchProduct = async () => {
-      const data: Product = {
-        id: 1,
-        imageUrl: 'https://grostore-wp.themetags.com/wp-content/uploads/2023/03/product-4-500x400.png',
-        title: 'Organic Green Tea',
-        price: 15.0,
-        rating: 5.0,
-        reviewsCount: 2,
-      };
-      setProduct(data);
-    };
-
-    fetchProduct();
-  }, []);
-
-  if (!product) {
-    return <div>Loading...</div>;
-  }
-
+const ProductCard: React.FC<ProductCardProps> = ({
+  id,
+  image,
+  category,
+  title,
+  rating,
+  price,
+  oldPrice,
+  discount
+}) => {
   return (
-    <div className="horizontal-product-card flex items-center p-4 rounded-2 gap-4 shadow-lg">
-      <div className="thumbnail position-relative rounded-2">
-        <a href="#">
-          <img
-            loading="lazy"
-            decoding="async"
-            width="500"
-            height="400"
-            src={product.imageUrl}
-            className="img-fluid rounded-lg"
-            alt={product.title}
+    <div className="col-lg-4 col-sm-6">
+      <div className={`${styles.verticalProductCard} rounded-2 position-relative border-0 bg-white`}>
+        {discount && (
+          <span className={`${styles.offerBadge} text-white fw-bold fs-xxs position-absolute start-0 top-0`}>
+            {discount}
+          </span>
+        )}
+        <div className={`${styles.thumbnail} position-relative text-center`}>
+          <Image
+            src={`/images/${image}`}
+            alt={title}
+            width={550}
+            height={400}
+            className={`${styles.featureImg} img-fluid wp-post-image`}
           />
-        </a>
-        <div className="product-btns product-overlay position-absolute start-0 top-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-2">
-          <a href="#" className="wishlist-btn">
-            <i className="fa fa-heart-o"></i>
-          </a>
-          <a href="#" className="cart-btn">
-            <i className="fa-solid fa-arrow-right-arrow-left"></i>
-          </a>
-          <a href="#" className="quick-view-btn">
-            <i className="fa fa-eye"></i>
-          </a>
-        </div>
-      </div>
-      <div className="card-content mt-4 mt-sm-0">
-        <div className="ratting d-flex align-items-center">
-          <div className="star-rating" role="img" aria-label={`Rated ${product.rating} out of 5`}>
-            <span style={{ width: '100%' }}>Rated <strong className="rating">{product.rating}</strong> out of 5</span>
+          <div className={`${styles.productBtns} position-absolute d-flex gap-2 flex-column`}>
+            <div className="yith-wcwl-add-to-wishlist">
+              <div className="yith-wcwl-add-button">
+                <a href={`?add_to_wishlist=${id}`} className="add_to_wishlist single_add_to_wishlist">
+                  <i className="yith-wcwl-icon fa fa-heart-o"></i>
+                  <span></span>
+                </a>
+              </div>
+            </div>
+            <a href="#" className="button yith-wcqv-button" data-product_id={id}></a>
+            <a href={`javascript:void(0);`} className="cart-btn" onClick={() => {/* handle compare logic */}}>
+              <i className="fa-solid fa-arrow-right-arrow-left"></i>
+            </a>
           </div>
-          <span className="count flex-shrink-0 text-gray-500 text-sm">({product.reviewsCount} reviews)</span>
         </div>
-        <a href="#" className="fw-bold text-heading title d-block text-xl">
-          {product.title}
-        </a>
-        <div className="pricing mt-2">
-          <h6 className="price text-danger text-xl font-bold">
-            ${product.price.toFixed(2)}
+        <div className={styles.cardContent}>
+          <Link href={`/product-category/${category}`} className="mb-2 d-inline-block text-secondary fw-semibold fs-xxs">
+            {category}
+          </Link>
+          <Link href={`/product/${id}`} className="card-title fw-bold d-block mb-2" title={title}>
+            {title}
+          </Link>
+          <div className="product-rating d-flex align-items-center flex-nowrap fs-xxs mb-2">
+            <div className="ratting d-flex align-items-center">
+              <div className="star-rating" role="img" aria-label={`Rated ${rating} out of 5`}>
+                <span style={{ width: `${(rating / 5) * 100}%` }}>
+                  Rated <strong className="rating">{rating}</strong> out of 5 based on <span className="rating">1</span> customer rating
+                </span>
+              </div>
+            </div>
+          </div>
+          <h6 className={styles.price}>
+            {oldPrice && <del aria-hidden="true"><span>${oldPrice}</span></del>}
+            <ins><span>${price}</span></ins>
           </h6>
+          <a href={`?add-to-cart=${id}`} data-quantity="1" className="btn btn-outline-secondary btn-md">
+            Add to cart
+          </a>
         </div>
-        <a href="#" className="text-sm fw-bold mt-3 inline-block text-blue-500 hover:underline">
-          Shop Now <span className="ms-1"><i className="fa-solid fa-arrow-right"></i></span>
-        </a>
       </div>
     </div>
   );

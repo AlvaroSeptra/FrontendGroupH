@@ -109,9 +109,9 @@ export function FeatureCard() {
                     <div className="card-content mt-4 mt-sm-0">
                         <div className="ratting d-flex align-items-center">
                             <div className="star-rating" role="img" aria-label="Rated 4.50 out of 5">
-                                <span style={{ width: '90%' }}>Rated <strong className="rating">4.50</strong> out of 5</span>
+                                <span style={{ width: '90%' }}>Rated <strong className="rating">5.00</strong> out of 5</span>
                             </div>
-                            <span className="count flex-shrink-0 text-gray-500 text-sm">(5 reviews)</span>
+                            <span className="count flex-shrink-0 text-gray-500 text-sm">(1 reviews)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
                             Avocado
@@ -137,7 +137,7 @@ export function FeatureCard() {
                                 height="400" 
                                 src="https://grostore-wp.themetags.com/wp-content/uploads/2023/03/product-3-500x400.png" 
                                 className="img-fluid rounded-lg" 
-                                alt="Premium Mixed Nuts" 
+                                alt="Pistachio Nuts" 
                             />
                         </a>
                         <div className="product-btns product-overlay position-absolute start-0 top-0 w-100 h-100 d-flex align-items-center justify-content-center gap-2 rounded-2">
@@ -155,9 +155,9 @@ export function FeatureCard() {
                     <div className="card-content mt-4 mt-sm-0">
                         <div className="ratting d-flex align-items-center">
                             <div className="star-rating" role="img" aria-label="Rated 4.00 out of 5">
-                                <span style={{ width: '80%' }}>Rated <strong className="rating">4.00</strong> out of 5</span>
+                                <span style={{ width: '80%' }}>Rated <strong className="rating">5.00</strong> out of 5</span>
                             </div>
-                            <span className="count flex-shrink-0 text-gray-500 text-sm">(3 reviews)</span>
+                            <span className="count flex-shrink-0 text-gray-500 text-sm">(1 reviews)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
                             Pistachio Nuts
@@ -203,7 +203,7 @@ export function FeatureCard() {
                             <div className="star-rating" role="img" aria-label="Rated 5.00 out of 5">
                                 <span style={{ width: '100%' }}>Rated <strong className="rating">5.00</strong> out of 5</span>
                             </div>
-                            <span className="count flex-shrink-0 text-gray-500 text-sm">(2 reviews)</span>
+                            <span className="count flex-shrink-0 text-gray-500 text-sm">(1 reviews)</span>
                         </div>
                         <a href="#" className="fw-bold text-heading title d-block text-xl">
                             Tomato

@@ -10,14 +10,11 @@ export interface User {
 }
 
 export interface Product {
-  productId: number;
-  sellerId: number;
-  productName: string;
+  id: number;
+  name: string;
+  image: string;
   description: string;
   price: number;
-  quantity: number;
-  category: string;
-  ecoFriendly: boolean;
 }
 
 export interface CartItem {
