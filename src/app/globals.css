@@ -4,74 +4,69 @@
 @tailwind utilities;
 
 /* Custom styles */
-.widget-title {
-  font-size: 1.25rem; /* 20px */
-  font-weight: bold;
-  margin-bottom: 0.5rem; /* Reduce the margin to decrease space */
+.grostore_blog_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background-color: #f3f4f6; /* Light gray background */
 }
 
-.widget-title .hr-line {
-  border-bottom: 2px solid #333; /* Adjust color and thickness as needed */
-  margin-top: 0.25rem; /* Adjust spacing above the line */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem; /* Adjust as needed */
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
 }
 
-/* Ensure there is minimal margin between widget title and the list */
-.widget_block > ul {
-  margin-top: 0; /* Reset margin-top to eliminate extra space */
+.return-to-shop {
+  text-align: center;
 }
 
-.widget-title {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem; /* 16px */
-  }
-  
-  .widget-title h6 {
-    margin-bottom: 0;
-    font-weight: bold;
-    font-size: 1.125rem; /* 18px */
-  }
-  
-  .widget-title .hr-line {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: #ccc;
-    margin-left: 0.5rem; /* 8px */
-  }
-  
-  .listing-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.75rem; /* 12px */
-    background-color: #ffffff;
-    border-radius: 0.5rem; /* 8px */
-    padding: 1.25rem 1rem; /* 20px 16px */
-    margin-bottom: 1.5rem; /* 24px */
-  }
-  
-  .woocommerce-result-count {
-    margin-bottom: 0;
-    font-weight: bold;
-  }
-  
-  .woocommerce-ordering {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem; /* 12px */
-    margin: 0;
-  }
-  
-  .woocommerce-ordering label {
-    font-weight: bold;
-    font-size: 0.875rem; /* 14px */
-    color: #333;
-  }
-  
-  .woocommerce-ordering select {
-    font-size: 0.75rem; /* 12px */
-    font-weight: 500;
-    padding: 0.25rem 0.5rem; /* 4px 8px */
-  }
+.return-to-shop .button {
+  background-color: #0073e6;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.return-to-shop .button:hover {
+  background-color: #005bb5;
+}
+
+.wc-empty-cart-message {
+  text-align: center;
+  padding: 2rem;
+}
+
+.wc-block-components-notice-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e3f6ff;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.wc-block-components-notice-banner svg {
+  margin-right: 1rem;
+}
+
+.wc-block-components-notice-banner__content {
+  font-size: 1rem;
+  color: #333;
+}
+
+.bg-white {
+  background-color: #ffffff; /* White background without shadow */
+}
+
+.max-w-3xl {
+  max-width: 48rem; /* Adjust based on your design requirements */
+}

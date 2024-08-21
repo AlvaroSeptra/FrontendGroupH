@@ -1,15 +1,18 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiSearch, FiDollarSign } from 'react-icons/fi'; // Import ikon dolar
+import debounce from 'lodash/debounce';
 
 const ProductsPage: React.FC = () => {
   const defaultMinPrice = 0;
   const defaultMaxPrice = 120;
+  const itemsPerPage = 3; // Jumlah item per halaman
   const [minPrice, setMinPrice] = useState(defaultMinPrice);
   const [maxPrice, setMaxPrice] = useState(defaultMaxPrice);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [location, setLocation] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
 
   // Daftar produk dengan lokasi
   const products = [
@@ -35,23 +38,12 @@ const ProductsPage: React.FC = () => {
     { name: 'Nuts & Dried Foods', count: 1 }
   ];
 
-  const filteredProducts = products.filter(product => {
-    const isInPriceRange = product.price >= minPrice && product.price <= maxPrice;
-    const isInCategory = selectedCategory ? product.category === selectedCategory : true;
-    const isInLocation = location ? product.location.toLowerCase().includes(location.toLowerCase()) : true;
-    return isInPriceRange && isInCategory && isInLocation;
-  });
-
   const handleMinPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMinPrice(Number(e.target.value));
   };
 
   const handleMaxPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxPrice(Number(e.target.value));
-  };
-
-  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocation(e.target.value);
   };
 
   const resetPriceFilter = () => {
@@ -61,6 +53,32 @@ const ProductsPage: React.FC = () => {
 
   const handleCategoryClick = (category: string | null) => {
     setSelectedCategory(category);
+    setCurrentPage(1); // Reset ke halaman pertama saat kategori berubah
+  };
+
+  // Menggunakan debounce untuk search bar
+  const debouncedLocationChange = debounce((value: string) => {
+    setLocation(value);
+    setCurrentPage(1); // Reset ke halaman pertama saat lokasi berubah
+  }, 500);
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedLocationChange(e.target.value);
+  };
+
+  const filteredProducts = products.filter(product => {
+    const isInPriceRange = product.price >= minPrice && product.price <= maxPrice;
+    const isInCategory = selectedCategory ? product.category === selectedCategory : true;
+    const isInLocation = location ? product.location.toLowerCase().includes(location.toLowerCase()) : true;
+    return isInPriceRange && isInCategory && isInLocation;
+  });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
   };
 
   return (
@@ -126,7 +144,6 @@ const ProductsPage: React.FC = () => {
             <div className="relative">
               <input 
                 type="text" 
-                value={location} 
                 onChange={handleLocationChange} 
                 placeholder="Enter city" 
                 className="border border-gray-300 p-2 pl-10 rounded-lg w-64"
@@ -138,31 +155,45 @@ const ProductsPage: React.FC = () => {
 
         <div className="mb-4">
           <p className="text-sm text-gray-600">
-            Showing {filteredProducts.length} of {products.length} results
+            Showing {paginatedProducts.length} of {filteredProducts.length} results
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+          {paginatedProducts.length > 0 ? (
+            paginatedProducts.map((product) => (
               <div key={product.id} className="border border-gray-300 p-4 rounded-lg shadow-md flex flex-col items-center">
                 <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-4 rounded-lg" />
-                <h2 className="text-xl font-semibold mb-2 text-center">{product.name}</h2>
-                <div className="text-sm text-gray-500 mb-2">
-                  Rated 5.00 out of 5 (1 review)
-                </div>
-                <span className="text-sm text-gray-600 mb-2">Category: {product.category}</span>
-                <span className="text-sm text-gray-600 mb-2">Location: {product.location}</span>
-                <span className="text-lg font-bold mb-4">${product.price.toFixed(2)}</span>
-                <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
-                  Add to Cart
+                <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+                <p className="text-sm text-gray-500 mb-2">{product.location}</p>
+                <p className="font-bold text-gray-800 mb-2">${product.price.toFixed(2)}</p>
+                <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 w-full">
+                Add to Cart
                 </button>
               </div>
             ))
           ) : (
-            <p>No products found in this price range.</p>
+            <p className="text-gray-500 text-center col-span-full">No products found.</p>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-6 flex justify-center">
+            <ul className="flex space-x-4">
+              {Array.from({ length: totalPages }, (_, index) => (
+                <li key={index + 1}>
+                  <button 
+                    className={`px-4 py-2 rounded-lg ${currentPage === index + 1 ? 'bg-gray-600 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`} 
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

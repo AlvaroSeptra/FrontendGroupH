@@ -14,6 +14,8 @@ interface ProductCardProps {
   price: string;
   oldPrice?: string;
   discount?: string;
+  onAddToCart?: () => void; // Tambahkan prop ini
+  onClick?: () => void; // Tambahkan prop ini
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -24,7 +26,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   rating,
   price,
   oldPrice,
-  discount
+  discount,
+  onAddToCart, // Ambil prop ini
+  onClick // Ambil prop ini
 }) => {
   return (
     <div className="col-lg-4 col-sm-6">
@@ -52,9 +56,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             </div>
             <a href="#" className="button yith-wcqv-button" data-product_id={id}></a>
-            <a href={`javascript:void(0);`} className="cart-btn" onClick={() => {/* handle compare logic */}}>
+            <a href={`javascript:void(0);`} className="cart-btn" onClick={onClick}>
               <i className="fa-solid fa-arrow-right-arrow-left"></i>
             </a>
+            <button className="btn btn-outline-secondary btn-md" onClick={onAddToCart}>
+              Add to cart
+            </button>
           </div>
         </div>
         <div className={styles.cardContent}>
@@ -77,9 +84,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
             {oldPrice && <del aria-hidden="true"><span>${oldPrice}</span></del>}
             <ins><span>${price}</span></ins>
           </h6>
-          <a href={`?add-to-cart=${id}`} data-quantity="1" className="btn btn-outline-secondary btn-md">
-            Add to cart
-          </a>
         </div>
       </div>
     </div>
