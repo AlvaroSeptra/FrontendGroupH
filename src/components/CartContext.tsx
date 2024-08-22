@@ -1,7 +1,7 @@
 // src/components/CartContext.tsx
 'use client';
 
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { CartItem, Cart } from '@/types';
 
 interface CartContextType {
@@ -9,7 +9,7 @@ interface CartContextType {
   addToCart: (product: any, quantity?: number) => void;
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+export const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<Cart>({
@@ -18,6 +18,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     cartItems: [],
     totalPrice: 0,
   });
+
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      setCart(JSON.parse(savedCart));
+    }
+  }, []);
+
 
   const addToCart = (product: any, quantity: number = 1) => {
     const existingCartItem = cart.cartItems.find(
@@ -49,6 +57,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     );
 
     setCart({ ...cart, cartItems: updatedCartItems, totalPrice: updatedTotalPrice });
+    localStorage.setItem('cart', JSON.stringify({ ...cart, cartItems: updatedCartItems, totalPrice: updatedTotalPrice }));
   };
 
   return (

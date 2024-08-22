@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { CartItem, Cart } from '@/types';
+import { Cart, CartItem } from '@/types';
 import { useRouter } from 'next/navigation';
-import { useCart } from '@/components/CartContext';
+import { useEffect, useState } from 'react';
 
 const CartPage = () => {
   const [cart, setCart] = useState<Cart>({
@@ -15,9 +14,9 @@ const CartPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const cartContext = useCart();
-  console.log(cartContext.cart);
-
+  const cartData = localStorage.getItem('cart');
+  const parsedCartData = JSON.parse(cartData || '{}');
+  console.log(cartData)
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +32,7 @@ const CartPage = () => {
     };
 
     fetchProducts();
-    setCart(cartContext.cart);
+    setCart(parsedCartData);
   }, []);
 
   const handleAddToCart = (product: any, quantity: number = 1) => {
