@@ -95,7 +95,7 @@ const About = () => {
             {/* Top Row */}
             <div className="flex flex-col items-center text-center">
               <Image
-                src="/cowok.jpg"
+                src="/leonard.jpg"
                 alt="Leonard Abimanyu"
                 width={180}
                 height={180}
@@ -106,7 +106,7 @@ const About = () => {
             </div>
             <div className="flex flex-col items-center text-center">
               <Image
-                src="/cewe.jpg"
+                src="/michelyn.jpg"
                 alt="Michelyn Angela"
                 width={180}
                 height={180}
@@ -118,7 +118,7 @@ const About = () => {
             {/* Bottom Row */}
             <div className="flex flex-col items-center text-center">
               <Image
-                src="/cowok.jpg"
+                src="/alvaro.png"
                 alt="Alvaro"
                 width={180}
                 height={180}
@@ -129,7 +129,7 @@ const About = () => {
             </div>
             <div className="flex flex-col items-center text-center">
               <Image
-                src="/cowok.jpg"
+                src="/fawaz.jpg"
                 alt="Aid Fawwaz"
                 width={180}
                 height={180}
