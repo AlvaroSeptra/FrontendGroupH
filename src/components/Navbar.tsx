@@ -64,6 +64,16 @@ const Navbar = () => {
             Products
           </Link>
           <Link
+            href="/cart"
+            className={`${
+              pathname === "/cart"
+                ? "text-green-500 font-bold"
+                : "text-white hover:text-green-300"
+            }`}
+          >
+            Cart
+          </Link>
+          <Link
             href="/about"
             className={`${
               pathname === "/about"
