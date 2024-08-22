@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { CartItem, Cart } from '@/types';
 import { useRouter } from 'next/navigation';
+import { useCart } from '@/components/CartContext';
 
 const CartPage = () => {
   const [cart, setCart] = useState<Cart>({
@@ -14,6 +15,8 @@ const CartPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const cartContext = useCart();
+  console.log(cartContext.cart);
 
   const router = useRouter();
 
@@ -30,6 +33,7 @@ const CartPage = () => {
     };
 
     fetchProducts();
+    setCart(cartContext.cart);
   }, []);
 
   const handleAddToCart = (product: any, quantity: number = 1) => {

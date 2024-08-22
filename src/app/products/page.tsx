@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiSearch, FiDollarSign } from 'react-icons/fi'; // Import ikon dolar
 import debounce from 'lodash/debounce';
+import ProductCard from '@/components/ProductCard';
 
 const ProductsPage: React.FC = () => {
   const defaultMinPrice = 0;
@@ -82,17 +83,24 @@ const ProductsPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row mt-12"> 
-      <div className="w-full md:w-1/4 p-6"> 
+    
+    <div className="flex flex-col md:flex-row mt-12">
+      <div className="w-full md:w-1/4 p-6">
         {/* Sidebar Categories */}
-        <div className="bg-white py-6 px-5 widget_block mb-6 rounded-lg shadow-lg"> 
+        <div className="bg-white py-6 px-5 widget_block mb-6 rounded-lg shadow-lg">
           <h6 className="mb-4 font-bold text-lg text-gray-800">Categories</h6>
-          <ul className="space-y-3"> 
+          <ul className="space-y-3">
             {categories.map((category) => (
               <li key={category.name}>
-                <button 
-                  onClick={() => handleCategoryClick(category.name === 'All Categories' ? null : category.name)} 
-                  className={`flex justify-between items-center text-gray-700 hover:text-gray-900 ${selectedCategory === category.name ? 'font-bold' : ''}`}
+                <button
+                  onClick={() =>
+                    handleCategoryClick(
+                      category.name === "All Categories" ? null : category.name
+                    )
+                  }
+                  className={`flex justify-between items-center text-gray-700 hover:text-gray-900 ${
+                    selectedCategory === category.name ? "font-bold" : ""
+                  }`}
                 >
                   <span>{category.name}</span>
                   <span className="text-gray-500">({category.count})</span>
@@ -103,32 +111,42 @@ const ProductsPage: React.FC = () => {
         </div>
 
         {/* Filter by Price */}
-        <div className="bg-white py-6 px-5 widget_block mb-6 rounded-lg shadow-lg"> 
-          <h6 className="font-bold mb-4 text-lg text-gray-800">Filter by Price</h6>
+        <div className="bg-white py-6 px-5 widget_block mb-6 rounded-lg shadow-lg">
+          <h6 className="font-bold mb-4 text-lg text-gray-800">
+            Filter by Price
+          </h6>
           <div className="flex flex-col gap-4">
             <label className="flex items-center relative">
-              <FiDollarSign className="absolute left-3 text-gray-500" size={20} /> {/* Ikon dolar */}
-              <input 
-                type="number" 
+              <FiDollarSign
+                className="absolute left-3 text-gray-500"
+                size={20}
+              />{" "}
+              {/* Ikon dolar */}
+              <input
+                type="number"
                 placeholder="Min Price"
-                value={minPrice} 
-                onChange={handleMinPriceChange} 
+                value={minPrice}
+                onChange={handleMinPriceChange}
                 className="pl-10 border border-gray-300 p-2 rounded-lg w-24"
               />
             </label>
             <label className="flex items-center relative">
-              <FiDollarSign className="absolute left-3 text-gray-500" size={20} /> {/* Ikon dolar */}
-              <input 
-                type="number" 
+              <FiDollarSign
+                className="absolute left-3 text-gray-500"
+                size={20}
+              />{" "}
+              {/* Ikon dolar */}
+              <input
+                type="number"
                 placeholder="Max Price"
-                value={maxPrice} 
-                onChange={handleMaxPriceChange} 
+                value={maxPrice}
+                onChange={handleMaxPriceChange}
                 className="pl-10 border border-gray-300 p-2 rounded-lg w-24"
               />
             </label>
           </div>
-          <button 
-            className="mt-6 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 w-full" 
+          <button
+            className="mt-6 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 w-full"
             onClick={resetPriceFilter}
           >
             Reset Filter
@@ -138,42 +156,52 @@ const ProductsPage: React.FC = () => {
 
       <div className="w-full md:w-3/4 p-6">
         {/* Menampilkan jumlah produk yang ditampilkan dan total produk */}
-        <div className="mb-4 flex items-center justify-between"> 
+        <div className="mb-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Products</h1>
-          <div className="flex items-center gap-4"> 
+          <div className="flex items-center gap-4">
             <div className="relative">
-              <input 
-                type="text" 
-                onChange={handleLocationChange} 
-                placeholder="Enter city" 
+              <input
+                type="text"
+                onChange={handleLocationChange}
+                placeholder="Enter city"
                 className="border border-gray-300 p-2 pl-10 rounded-lg w-64"
               />
-              <FiSearch className="absolute top-2 left-3 text-gray-500" size={20} /> 
+              <FiSearch
+                className="absolute top-2 left-3 text-gray-500"
+                size={20}
+              />
             </div>
           </div>
         </div>
 
         <div className="mb-4">
           <p className="text-sm text-gray-600">
-            Showing {paginatedProducts.length} of {filteredProducts.length} results
+            Showing {paginatedProducts.length} of {filteredProducts.length}{" "}
+            results
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"> 
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {paginatedProducts.length > 0 ? (
             paginatedProducts.map((product) => (
-              <div key={product.id} className="border border-gray-300 p-4 rounded-lg shadow-md flex flex-col items-center">
-                <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-4 rounded-lg" />
-                <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
-                <p className="text-sm text-gray-500 mb-2">{product.location}</p>
-                <p className="font-bold text-gray-800 mb-2">${product.price.toFixed(2)}</p>
-                <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 w-full">
-                Add to Cart
-                </button>
-              </div>
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
+              // <div key={product.id} className="border border-gray-300 p-4 rounded-lg shadow-md flex flex-col items-center">
+              //   <img src={product.image} alt={product.name} className="w-full h-40 object-cover mb-4 rounded-lg" />
+              //   <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+              //   <p className="text-sm text-gray-500 mb-2">{product.location}</p>
+              //   <p className="font-bold text-gray-800 mb-2">${product.price.toFixed(2)}</p>
+              //   <button className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 w-full">
+              //   Add to Cart
+              //   </button>
+              // </div>
             ))
           ) : (
-            <p className="text-gray-500 text-center col-span-full">No products found.</p>
+            <p className="text-gray-500 text-center col-span-full">
+              No products found.
+            </p>
           )}
         </div>
 
@@ -183,8 +211,12 @@ const ProductsPage: React.FC = () => {
             <ul className="flex space-x-4">
               {Array.from({ length: totalPages }, (_, index) => (
                 <li key={index + 1}>
-                  <button 
-                    className={`px-4 py-2 rounded-lg ${currentPage === index + 1 ? 'bg-gray-600 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`} 
+                  <button
+                    className={`px-4 py-2 rounded-lg ${
+                      currentPage === index + 1
+                        ? "bg-gray-600 text-white"
+                        : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                    }`}
                     onClick={() => handlePageChange(index + 1)}
                   >
                     {index + 1}
