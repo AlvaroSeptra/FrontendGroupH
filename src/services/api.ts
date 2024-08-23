@@ -8,8 +8,8 @@ const api = axios.create({
 });
 
 // Fungsi Login
-export const loginUser = (username: string, password: string) => {
-  return api.post("/login", { username, password });
+export const loginUser = (email: string, password: string) => {
+  return api.post("/login", { email, password });
 };
 
 // Fungsi Registrasi
