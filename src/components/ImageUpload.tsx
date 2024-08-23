@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
 import { ImagePlus, Trash } from "lucide-react";
-import { CldImage } from "next-cloudinary";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { useImageStore } from "@/hooks/useImageStore";
 
 interface ImageUploadProps {
   disabled?: boolean;
-  onChange: (value: string) => void;
-  onRemove: (value: string) => void;
   value: string[];
+  onChange: (url: string) => void;
+  onRemove: (url: string) => void;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({
   disabled,
+  value,
   onChange,
   onRemove,
-  value,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -21,24 +22,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setIsMounted(true);
   }, []);
 
-  const onUpload = (result: any) => {
+  const onUpload = (result: { info: { secure_url: string } }) => {
     onChange(result.info.secure_url);
-  };
-
-  const handleUploadClick = () => {
-    const widget = window.cloudinary.createUploadWidget(
-      {
-        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-        uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
-        multiple: false,
-      },
-      (error: any, result: any) => {
-        if (!error && result && result.event === "success") {
-          onUpload(result.info);
-        }
-      }
-    );
-    widget.open();
   };
 
   if (!isMounted) {
@@ -73,17 +58,24 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
       </div>
-      <div className="mb-4">
-        <button
-          type="button"
-          disabled={disabled}
-          onClick={handleUploadClick}
-          className="p-2 rounded-full border border-gray-300 bg-gray-200 flex items-center"
-        >
-          <ImagePlus className="h-6 w-6" />
-          <span className="ml-2 text-sm">Upload image</span>
-        </button>
-      </div>
+      <CldUploadWidget
+        onUpload={onUpload}
+        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""}
+      >
+        {({ open }) => (
+          <div className="mb-4">
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={open} // Removed @ts-ignore by ensuring open is correctly typed
+              className="p-2 rounded-full border border-gray-300 bg-gray-200 flex items-center"
+            >
+              <ImagePlus className="h-6 w-6" />
+              <span className="ml-2 text-sm">Upload image</span>
+            </button>
+          </div>
+        )}
+      </CldUploadWidget>
     </div>
   );
 };

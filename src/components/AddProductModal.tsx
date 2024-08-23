@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import ImageUpload from "./ImageUpload";
+import { useImageStore } from "@/hooks/useImageStore";
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -20,12 +22,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   onClose,
   onAddProduct,
 }) => {
+  const { images, addImage, removeImage } = useImageStore();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [manualImageUrl, setManualImageUrl] = useState<string>("");
 
   const [errors, setErrors] = useState({
@@ -37,6 +39,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   });
 
   const userId = localStorage.getItem("id");
+
+  useEffect(() => {
+    if (images.length > 0) {
+      setManualImageUrl(images[0]); // Set the first image URL from the Zustand store
+    }
+  }, [images]);
 
   if (!isOpen || !userId) return null;
 
@@ -59,15 +67,28 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const checkImageUrl = async (url: string) => {
+    try {
+      const response = await fetch(url, { method: "HEAD" });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleSubmit = async () => {
     if (validateForm() && userId) {
+      const validImageUrl = (await checkImageUrl(manualImageUrl))
+        ? manualImageUrl
+        : images[0] || "default-image-url";
+
       onAddProduct({
         name,
         description,
         price: parseFloat(price),
         category,
         quantity,
-        image_url: manualImageUrl || imageUrl || "default-image-url",
+        image_url: validImageUrl,
         sellerId: userId,
       });
       onClose();
@@ -172,15 +193,16 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               className="w-full border border-gray-300 rounded p-2 mb-2"
             />
             <ImageUpload
-              value={imageUrl ? [imageUrl] : []}
-              onChange={(url) => setImageUrl(url)}
-              onRemove={() => setImageUrl("")}
+              value={images}
+              onChange={(url: string) => addImage(url)}
+              onRemove={(url: string) => removeImage(url)}
             />
+
             {/* Display the uploaded image if available */}
-            {imageUrl && (
+            {manualImageUrl && (
               <div className="mt-4">
                 <img
-                  src={imageUrl}
+                  src={manualImageUrl}
                   alt="Uploaded"
                   className="w-full h-auto object-cover"
                 />
