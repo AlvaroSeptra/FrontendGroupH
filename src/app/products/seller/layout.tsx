@@ -10,7 +10,6 @@ const SellerLayout: React.FC<{ children: React.ReactNode }> = ({
     <div>
       <Navbar />
       <main className="p-4 mt-10">{children}</main>
-      <Footer />
     </div>
   );
 };
