@@ -1,39 +1,19 @@
-// hooks/useAuth.ts
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
-const useAuth = () => {
-  const [auth, setAuth] = useState<{
-    isAuthenticated: boolean;
-    token: string | null;
-  }>({
-    isAuthenticated: false,
-    token: null,
-  });
+export const useAuth = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
-    // Check if token exists in localStorage
     const token = localStorage.getItem("token");
     if (token) {
-      setAuth({ isAuthenticated: true, token });
+      setIsAuthenticated(true);
     } else {
-      setAuth({ isAuthenticated: false, token: null });
+      setIsAuthenticated(false);
+      router.push("/login"); // Redirect to login if not authenticated
     }
-  }, []);
+  }, [router]);
 
-  const login = (token: string) => {
-    localStorage.setItem("token", token);
-    setAuth({ isAuthenticated: true, token });
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setAuth({ isAuthenticated: false, token: null });
-    router.push("/login");
-  };
-
-  return { auth, login, logout };
+  return { isAuthenticated };
 };
-
-export default useAuth;

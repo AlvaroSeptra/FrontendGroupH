@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "@/services/api";
+import { useRouter } from "next/navigation";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().required("Please enter your email"),
@@ -16,14 +17,16 @@ const LoginSchema = Yup.object().shape({
 
 const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const handleLogin = async (values: { email: string; password: string }) => {
-    console.log("Sending the following data to backend:", values); // Log the request data
+    // console.log("Sending the following data to backend:", values); // Log the request data
 
     try {
       const response = await loginUser(values.email, values.password);
       localStorage.setItem("token", response.data.token); // Save token to localStorage
       console.log("Login successful");
+      router.push("/products");
     } catch (error) {
       console.error("Login error", error);
       if (error.response) {

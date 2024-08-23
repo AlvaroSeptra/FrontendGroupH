@@ -1,23 +1,18 @@
 // components/ProtectedRoute.tsx
-import React from "react";
-import { useRouter } from "next/router";
-import useAuth from "@/hooks/useAuth";
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const { auth } = useAuth();
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
-  React.useEffect(() => {
-    if (!auth.isAuthenticated) {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
       router.push("/login");
     }
-  }, [auth.isAuthenticated, router]);
-
-  if (!auth.isAuthenticated) {
-    return <div>Loading...</div>;
-  }
+  }, [router]);
 
   return <>{children}</>;
 };
