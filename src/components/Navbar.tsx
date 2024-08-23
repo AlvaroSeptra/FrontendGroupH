@@ -122,9 +122,9 @@ const Navbar = () => {
             <>
               {isSeller && (
                 <Link
-                  href="/seller"
+                  href="/products/seller"
                   className={`${
-                    pathname === "/seller"
+                    pathname === "/products/seller"
                       ? "text-green-500 font-bold"
                       : "text-white hover:text-green-300"
                   }`}

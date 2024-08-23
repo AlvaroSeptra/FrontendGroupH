@@ -28,7 +28,7 @@ const LoginForm: React.FC = () => {
       localStorage.setItem("role", response.data.role); // Save token to localStorage
       console.log("Login successful");
       router.push("/products");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error", error);
       if (error.response) {
         // Log error response from the server

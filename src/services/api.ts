@@ -42,9 +42,9 @@ export const fetchOrders = (customerId: number) => {
   return api.get<Order[]>(`/orders/${customerId}`);
 };
 
-// Fungsi Fetch Semua Produk Berdasarkan Seller ID
-export const fetchProductsBySeller = (sellerId: number) => {
-  return api.get<Product[]>(`/seller/${sellerId}/products`);
+// Fungsi Fetch Semua Produk Berdasarkan Seller
+export const fetchProductsBySeller = () => {
+  return api.get<Product[]>(`/products/seller`);
 };
 
 // Fungsi Tambah Produk Baru

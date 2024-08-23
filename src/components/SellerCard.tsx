@@ -1,0 +1,57 @@
+import React from "react";
+
+type ProductCardProps = {
+  product: {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    image: string;
+    quantity: number;
+    category: string;
+    sellerId: string;
+    image_url: string; // Add quantity here
+  };
+  onAddToCart: () => void;
+  onClick: () => void;
+};
+
+const SellerCard: React.FC<ProductCardProps> = ({
+  product,
+  onAddToCart,
+  onClick,
+}) => {
+  return (
+    <div
+      className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
+      onClick={onClick}
+    >
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+        <p className="text-gray-600 mb-2">{product.description}</p>
+        <p className="text-lg font-semibold mb-4">
+          Price: ${product.price.toFixed(2)}
+        </p>
+        <p className="text-sm mb-2">
+          Quantity: {product.quantity} {/* Display the quantity */}
+        </p>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart();
+          }}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+        >
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default SellerCard;
