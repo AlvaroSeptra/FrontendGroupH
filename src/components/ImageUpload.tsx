@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ImagePlus, Trash } from "lucide-react";
-import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { CldImage } from "next-cloudinary";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -23,6 +23,22 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   const onUpload = (result: any) => {
     onChange(result.info.secure_url);
+  };
+
+  const handleUploadClick = () => {
+    const widget = window.cloudinary.createUploadWidget(
+      {
+        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET,
+        multiple: false,
+      },
+      (error: any, result: any) => {
+        if (!error && result && result.event === "success") {
+          onUpload(result.info);
+        }
+      }
+    );
+    widget.open();
   };
 
   if (!isMounted) {
@@ -57,27 +73,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           </div>
         ))}
       </div>
-      <CldUploadWidget
-        onUpload={onUpload}
-        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""}
-      >
-        {({ open }) => {
-          return (
-            <div className="mb-4">
-              <button
-                type="button"
-                disabled={disabled}
-                // @ts-ignore
-                onClick={open}
-                className="p-2 rounded-full border border-gray-300 bg-gray-200 flex items-center"
-              >
-                <ImagePlus className="h-6 w-6" />
-                <span className="ml-2 text-sm">Upload image</span>
-              </button>
-            </div>
-          );
-        }}
-      </CldUploadWidget>
+      <div className="mb-4">
+        <button
+          type="button"
+          disabled={disabled}
+          onClick={handleUploadClick}
+          className="p-2 rounded-full border border-gray-300 bg-gray-200 flex items-center"
+        >
+          <ImagePlus className="h-6 w-6" />
+          <span className="ml-2 text-sm">Upload image</span>
+        </button>
+      </div>
     </div>
   );
 };

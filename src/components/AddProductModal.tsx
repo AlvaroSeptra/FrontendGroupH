@@ -176,6 +176,16 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               onChange={(url) => setImageUrl(url)}
               onRemove={() => setImageUrl("")}
             />
+            {/* Display the uploaded image if available */}
+            {imageUrl && (
+              <div className="mt-4">
+                <img
+                  src={imageUrl}
+                  alt="Uploaded"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            )}
           </div>
 
           <button

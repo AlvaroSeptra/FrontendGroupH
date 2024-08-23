@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "@/types"; 
+import { Product } from "@/types";
 
 type ProductCardProps = {
   product: Product;
@@ -14,9 +14,14 @@ const SellerCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
       onClick={onClick}
     >
       <img
-        src={product.image_url} // Use image_url here
+        src={product.image_url || "/paper-bag.png"} // Use the path to the default image
         alt={product.name}
         className="w-full h-48 object-cover"
+        loading="lazy" // Add lazy loading here
+        onError={(e) => {
+          // Provide a fallback image if there's an error loading the image
+          e.currentTarget.src = "/paper-bag.png";
+        }}
       />
       <div className="p-4">
         <h3 className="text-xl font-bold mb-2">{product.name}</h3>
