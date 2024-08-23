@@ -17,6 +17,7 @@ type ProductCardProps = {
 const SellerCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
   return (
     <div
+      key={product.id}
       className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
       onClick={onClick}
     >

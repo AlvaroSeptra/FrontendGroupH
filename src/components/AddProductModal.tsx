@@ -5,6 +5,7 @@ interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddProduct: (product: {
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -62,6 +63,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const handleSubmit = () => {
     if (validateForm() && userId) {
       onAddProduct({
+        id: crypto.randomUUID(),
         name,
         description,
         price: parseFloat(price),
@@ -76,6 +78,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   return (
     <div
+      key={product.id}
       className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50 ${
         isOpen ? "block" : "hidden"
       }`}
