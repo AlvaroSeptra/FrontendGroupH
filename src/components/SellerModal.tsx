@@ -39,6 +39,7 @@ const SellerModal: React.FC<SellerModalProps> = ({
 
   return (
     <div
+      key={product.id}
       className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50"
       onClick={onClose}
     >

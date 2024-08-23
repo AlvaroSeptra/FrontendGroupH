@@ -1,5 +1,3 @@
-"use client";
-// components/AddVoucherModal.tsx
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -33,6 +31,7 @@ const AddVoucherModal: React.FC<AddVoucherModalProps> = ({
     validationSchema,
     onSubmit: async (values) => {
       try {
+        console.log("Submitting voucher with values:", values); // Add this line
         await addVoucher({
           code: values.code,
           discount: values.discount,
