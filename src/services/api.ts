@@ -119,3 +119,16 @@ export const updateProduct = (productId: string, product: Partial<Product>) => {
 export const deleteProduct = (productId: number) => {
   return api.delete(`/products/${productId}`);
 };
+export const addVoucher = (voucherData: Omit<Voucher, "id">) => {
+  return api.post("/vouchers", voucherData);
+};
+
+export const fetchVouchers = () => {
+  return api.get("/vouchers");
+};
+
+export const deleteVoucher = (id: string) => {
+  return api.delete(`/vouchers/${id}`);
+};
+
+export default api;

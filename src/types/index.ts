@@ -43,8 +43,8 @@ export interface Order {
 }
 
 export interface Voucher {
-  voucherId: number;
-  sellerId: number;
-  productId: number;
-  discount: number; // Persentase diskon
+  id: string;
+  code: string;
+  discount: number;
+  seller_id: string;
 }

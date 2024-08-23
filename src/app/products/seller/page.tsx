@@ -1,10 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchProductsBySeller, addProduct } from "@/services/api";
+import {
+  fetchProductsBySeller,
+  addProduct,
+  addVoucher,
+  fetchVouchers,
+  deleteVoucher,
+} from "@/services/api";
 import SellerCard from "@/components/SellerCard";
 import SellerModal from "@/components/SellerModal";
 import AddProductModal from "@/components/AddProductModal";
-import { Product } from "@/types";
+import AddVoucherModal from "@/components/AddVoucherModal";
+import VoucherListModal from "@/components/VoucherListModal"; // Import the new VoucherListModal component
+import { Product, Voucher } from "@/types";
 import SearchBar from "@/components/SearchBar";
 import FilterCategory from "@/components/FilterCategory";
 
@@ -14,6 +22,8 @@ const SellerProductsPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [isAddVoucherModalOpen, setIsAddVoucherModalOpen] = useState(false);
+  const [isVoucherListModalOpen, setIsVoucherListModalOpen] = useState(false); // State for VoucherListModal
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
@@ -61,6 +71,17 @@ const SellerProductsPage = () => {
     }
   };
 
+  const handleAddVoucher = async (voucherData: Omit<Voucher, "id">) => {
+    try {
+      await addVoucher(voucherData);
+      // Handle successful voucher addition (e.g., update the UI or notify the user)
+    } catch (error) {
+      console.error("Failed to add voucher", error);
+    } finally {
+      setIsAddVoucherModalOpen(false);
+    }
+  };
+
   const handleSearch = (searchTerm: string) => {
     const lowercasedTerm = searchTerm.toLowerCase();
     const filtered = products.filter((product) =>
@@ -104,6 +125,18 @@ const SellerProductsPage = () => {
       >
         Add Product
       </button>
+      <button
+        onClick={() => setIsAddVoucherModalOpen(true)} // Open AddVoucherModal
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded ml-2"
+      >
+        Add Voucher
+      </button>
+      <button
+        onClick={() => setIsVoucherListModalOpen(true)} // Open VoucherListModal
+        className="mb-4 px-4 py-2 bg-yellow-500 text-white rounded ml-2"
+      >
+        View Vouchers
+      </button>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentProducts.map((product) => (
           <SellerCard
@@ -145,6 +178,21 @@ const SellerProductsPage = () => {
           isOpen={isAddProductModalOpen}
           onClose={handleCloseAddProductModal}
           onAddProduct={handleAddProduct}
+        />
+      )}
+
+      {isAddVoucherModalOpen && (
+        <AddVoucherModal
+          isOpen={isAddVoucherModalOpen}
+          onClose={() => setIsAddVoucherModalOpen(false)}
+          onAddVoucher={handleAddVoucher}
+        />
+      )}
+
+      {isVoucherListModalOpen && (
+        <VoucherListModal
+          isOpen={isVoucherListModalOpen}
+          onClose={() => setIsVoucherListModalOpen(false)}
         />
       )}
     </div>
