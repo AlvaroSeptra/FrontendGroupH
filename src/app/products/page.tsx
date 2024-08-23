@@ -244,7 +244,7 @@ const ProductsPage: React.FC = () => {
                 <input
                   type="text"
                   onChange={handleLocationChange}
-                  placeholder="Enter city"
+                  placeholder="Enter product name"
                   className="border border-gray-300 p-2 pl-10 rounded-lg w-64"
                 />
                 <FiSearch

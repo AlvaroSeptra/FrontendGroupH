@@ -66,16 +66,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 
   const validateForm = () => {
     const newErrors: any = {};
-    const nameWords = name.trim().split(/\s+/);
-    const descriptionWords = description.trim().split(/\s+/);
 
     if (!name) newErrors.name = "Name is required";
-    else if (nameWords.length < 5)
-      newErrors.name = "Name must be at least 5 words";
 
     if (!description) newErrors.description = "Description is required";
-    else if (descriptionWords.length < 5)
-      newErrors.description = "Description must be at least 5 words";
 
     if (!price || isNaN(Number(price)))
       newErrors.price = "Price is required and must be a number";
