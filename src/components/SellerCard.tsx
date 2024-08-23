@@ -1,84 +1,54 @@
-// components/SellerModal.tsx
 import React from "react";
 
-type SellerModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
+type ProductCardProps = {
   product: {
     id: string;
     name: string;
     description: string;
-    price: number;
+    price: number | undefined; // Allow undefined for type safety
+    image_url: string; // Only using image_url
     quantity: number;
     category: string;
     sellerId: string;
-    image_url: string; // Updated to match backend field
   };
-  onAddToCart: (quantity: number) => void;
+  onAddToCart: () => void;
+  onClick: () => void;
 };
 
-const SellerModal: React.FC<SellerModalProps> = ({
-  isOpen,
-  onClose,
+const SellerCard: React.FC<ProductCardProps> = ({
   product,
   onAddToCart,
+  onClick,
 }) => {
-  const [quantity, setQuantity] = React.useState(1);
-
-  if (!isOpen) return null;
-
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50"
-      onClick={onClose}
+      className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
+      onClick={onClick}
     >
-      <div
-        className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative"
-        onClick={(e) => e.stopPropagation()} // Prevent clicking inside the modal from closing it
-      >
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-          onClick={onClose}
-        >
-          &times;
-        </button>
-        <img
-          src={product.image_url} // Updated to match backend field
-          alt={product.name}
-          className="w-full h-48 object-cover mb-4 rounded"
-        />
-        <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
-        <p className="text-lg mb-4">{product.description}</p>
+      <img
+        src={product.image_url} // Use image_url here
+        alt={product.name}
+        className="w-full h-48 object-cover"
+      />
+      <div className="p-4">
+        <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+        <p className="text-gray-600 mb-2">{product.description}</p>
         <p className="text-lg font-semibold mb-4">
-          Price: ${product.price.toFixed(2)}
+          Price: $
+          {product.price !== undefined
+            ? product.price.toFixed(2) // Format the price if it's defined
+            : "0.00"}{" "}
+          {/* Fallback to '0.00' if price is undefined */}
         </p>
-        <p className="text-sm mb-4">Category: {product.category}</p>
-        <p className="text-sm mb-4">Quantity: {product.quantity}</p>{" "}
-        {/* Display quantity */}
-        <div className="flex items-center mb-4">
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l"
-            onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-          >
-            -
-          </button>
-          <input
-            type="number"
-            value={quantity}
-            min="1"
-            className="w-12 text-center border-t border-b border-gray-300"
-            readOnly
-          />
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r"
-            onClick={() => setQuantity((prev) => prev + 1)}
-          >
-            +
-          </button>
-        </div>
+        <p className="text-sm mb-2">
+          Quantity: {product.quantity} {/* Display the quantity */}
+        </p>
         <button
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => onAddToCart(quantity)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart();
+          }}
+          className="px-4 py-2 bg-blue-500 text-white rounded"
         >
           Add to Cart
         </button>
@@ -87,4 +57,4 @@ const SellerModal: React.FC<SellerModalProps> = ({
   );
 };
 
-export default SellerModal;
+export default SellerCard;

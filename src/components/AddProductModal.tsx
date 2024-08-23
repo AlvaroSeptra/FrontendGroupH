@@ -177,8 +177,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               className="w-full border border-gray-300 rounded p-2"
             >
               <option value="">Select a category</option>
-              <option value="eco-friendly">Eco-Friendly</option>
-              <option value="organic">Organic</option>
+              <option value="eco-friendly">ecofriendly</option>
+              <option value="organic">organic</option>
             </select>
             {errors.category && (
               <p className="text-red-600 text-sm">{errors.category}</p>
