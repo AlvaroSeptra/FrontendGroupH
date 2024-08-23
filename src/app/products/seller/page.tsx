@@ -1,17 +1,16 @@
-// products/seller/page.tsx
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchProductsBySeller } from "@/services/api";
+import { fetchProductsBySeller, addProduct } from "@/services/api";
 import SellerCard from "@/components/SellerCard";
 import SellerModal from "@/components/SellerModal";
-import AddProductModal from "@/components/AddProductModal"; // Import the AddProductModal component
+import AddProductModal from "@/components/AddProductModal";
 import { Product } from "@/types";
 
 const SellerProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
-  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false); // State for AddProductModal
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,10 +43,17 @@ const SellerProductsPage = () => {
     setIsAddProductModalOpen(false);
   };
 
-  const handleAddProduct = (newProduct: Product) => {
-    // Implement logic to add the new product, e.g., make API call
-    console.log("New product added:", newProduct);
-    setIsAddProductModalOpen(false);
+  const handleAddProduct = async (newProduct: Omit<Product, "id">) => {
+    try {
+      // Add the new product using API call
+      const response = await addProduct(newProduct);
+      // Add the new product to the state
+      setProducts((prevProducts) => [...prevProducts, response.data]);
+    } catch (error) {
+      console.error("Failed to add product", error);
+    } finally {
+      setIsAddProductModalOpen(false);
+    }
   };
 
   return (

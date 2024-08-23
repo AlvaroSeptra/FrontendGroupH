@@ -1,19 +1,19 @@
-// components/AddProductModal.tsx
 import React, { useState } from "react";
+import axios from "axios";
 
-type AddProductModalProps = {
+interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddProduct: (product: {
     name: string;
     description: string;
-    price: number;
+    price: number; // Changed from number to string
     category: string;
     quantity: number;
-    ecoFriendly: boolean;
     image_url: string;
+    sellerId: string;
   }) => void;
-};
+}
 
 const AddProductModal: React.FC<AddProductModalProps> = ({
   isOpen,
@@ -22,34 +22,62 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(""); // Changed to string
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState(0);
-  const [ecoFriendly, setEcoFriendly] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  if (!isOpen) return null;
+  const userId = localStorage.getItem("id"); // Retrieve userId from local storage
+
+  if (!isOpen || !userId) return null;
+
+  const handleImageUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "your-cloudinary-preset"); // Replace with your Cloudinary preset
+
+    try {
+      const response = await axios.post("your-cloudinary-url", formData); // Replace with your Cloudinary URL
+      setImageUrl(response.data.secure_url);
+    } catch (error) {
+      console.error("Image upload failed", error);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      handleImageUpload(file);
+    }
+  };
 
   const handleSubmit = () => {
-    onAddProduct({
-      name,
-      description,
-      price,
-      category,
-      quantity,
-      ecoFriendly,
-      image_url: imageUrl,
-    });
+    if (userId) {
+      onAddProduct({
+        name,
+        description,
+        price: parseFloat(price),
+        category,
+        quantity,
+        image_url: imageUrl || "default-image-url", // Use default URL if imageUrl is empty
+        sellerId: userId, // Pass the userId as sellerId
+      });
+      onClose(); // Close modal after submission
+    }
   };
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50"
+      className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50 ${
+        isOpen ? "block" : "hidden"
+      }`}
       onClick={onClose}
     >
       <div
         className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full relative"
-        onClick={(e) => e.stopPropagation()} // Prevent clicking inside the modal from closing it
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -81,9 +109,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Price</label>
             <input
-              type="number"
+              type="text"
               value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
+              onChange={(e) => setPrice(e.target.value)}
               className="w-full border border-gray-300 rounded p-2"
             />
           </div>
@@ -106,25 +134,20 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Eco-Friendly
-            </label>
+            <label className="block text-sm font-medium mb-1">Image</label>
             <input
-              type="checkbox"
-              checked={ecoFriendly}
-              onChange={() => setEcoFriendly(!ecoFriendly)}
-              className="mr-2"
-            />
-            <span>Yes</span>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Image URL</label>
-            <input
-              type="text"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
               className="w-full border border-gray-300 rounded p-2"
             />
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Uploaded preview"
+                className="mt-4 w-full h-32 object-cover rounded"
+              />
+            )}
           </div>
           <button
             type="button"

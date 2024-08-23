@@ -24,8 +24,10 @@ const LoginForm: React.FC = () => {
 
     try {
       const response = await loginUser(values.email, values.password);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("role", response.data.role); // Save token to localStorage
+      localStorage.setItem("token", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("role", response.data.role);
+      localStorage.setItem("id", response.data.id); // Save token to localStorage
       console.log("Login successful");
       router.push("/products");
     } catch (error: any) {

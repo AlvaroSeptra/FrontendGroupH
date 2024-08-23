@@ -1,6 +1,7 @@
 // src/types/index.ts
 
 export interface User {
+  id: string;
   username: string;
   email: string;
   password: string;
@@ -16,7 +17,7 @@ export interface Product {
   quantity: number;
   category: string;
   sellerId: string;
-  image_url: string;
+  image_url?: string;
 }
 
 export interface CartItem {

@@ -47,6 +47,8 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("id");
+    localStorage.removeItem("refreshToken");
     setIsAuthenticated(false);
     setIsSeller(false);
     router.push("/");
