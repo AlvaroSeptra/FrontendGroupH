@@ -33,11 +33,7 @@ const Navbar = () => {
 
   // Define button size based on pathname
   const getButtonSizeClasses = () => {
-    if (pathname === "/login") {
-      return "py-2 px-6 text-lg"; // Large button for login page
-    } else {
-      return "py-1 px-3 text-sm"; // Smaller button for other pages
-    }
+    return pathname === "/login" ? "py-2 px-6 text-lg" : "py-1 px-3 text-sm";
   };
 
   const toggleMenu = () => {
@@ -59,7 +55,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <Image
-            src="/paper-bag.png" // Replace with your logo file name
+            src="/paper-bag.png"
             alt="Eco Market Logo"
             width={40}
             height={40}
@@ -80,26 +76,7 @@ const Navbar = () => {
           >
             Home
           </Link>
-          <Link
-            href="/products"
-            className={`${
-              pathname === "/products"
-                ? "text-green-500 font-bold"
-                : "text-white hover:text-green-300"
-            }`}
-          >
-            Products
-          </Link>
-          <Link
-            href="/cart"
-            className={`${
-              pathname === "/cart"
-                ? "text-green-500 font-bold"
-                : "text-white hover:text-green-300"
-            }`}
-          >
-            Cart
-          </Link>
+
           <Link
             href="/about"
             className={`${
@@ -109,16 +86,6 @@ const Navbar = () => {
             }`}
           >
             About
-          </Link>
-          <Link
-            href="/about/profile"
-            className={`${
-              pathname === "/about/profile"
-                ? "text-green-500 font-bold"
-                : "text-white hover:text-green-300"
-            }`}
-          >
-            Profile
           </Link>
           {isAuthenticated && (
             <>
@@ -134,6 +101,26 @@ const Navbar = () => {
                   Seller
                 </Link>
               )}
+              <Link
+                href="/products"
+                className={`${
+                  pathname === "/products"
+                    ? "text-green-500 font-bold"
+                    : "text-white hover:text-green-300"
+                }`}
+              >
+                Products
+              </Link>
+              <Link
+                href="/cart"
+                className={`${
+                  pathname === "/cart"
+                    ? "text-green-500 font-bold"
+                    : "text-white hover:text-green-300"
+                }`}
+              >
+                Cart
+              </Link>
               <button
                 className={`border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ${getButtonSizeClasses()}`}
                 onClick={handleLogout}
@@ -207,6 +194,17 @@ const Navbar = () => {
             Products
           </Link>
           <Link
+            href="/cart"
+            className={`block py-2 px-4 ${
+              pathname === "/cart"
+                ? "text-green-500 font-bold"
+                : "text-white hover:bg-green-700"
+            }`}
+            onClick={toggleMenu}
+          >
+            Cart
+          </Link>
+          <Link
             href="/about"
             className={`block py-2 px-4 ${
               pathname === "/about"
@@ -217,30 +215,19 @@ const Navbar = () => {
           >
             About
           </Link>
-          <Link
-            href="/about/profile"
-            className={`block py-2 px-4 ${
-              pathname === "/about/profile"
-                ? "text-green-500 font-bold"
-                : "text-white hover:bg-green-700"
-            }`}
-            onClick={toggleMenu}
-          >
-            Profile
-          </Link>
           {isAuthenticated && (
             <>
               {isSeller && (
                 <Link
-                  href="/seller-dashboard"
+                  href="/products/seller"
                   className={`block py-2 px-4 ${
-                    pathname === "/seller-dashboard"
+                    pathname === "/products/seller"
                       ? "text-green-500 font-bold"
                       : "text-white hover:bg-green-700"
                   }`}
                   onClick={toggleMenu}
                 >
-                  Seller Dashboard
+                  Seller
                 </Link>
               )}
               <button
