@@ -18,6 +18,7 @@ import FilterCategory from "@/components/FilterCategory";
 
 const SellerProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -94,11 +95,13 @@ const SellerProductsPage = () => {
   const handleFilterCategory = (category: string) => {
     if (category === "all") {
       setFilteredProducts(products);
+      setSelectedCategory("");
     } else {
       const filtered = products.filter(
         (product) => product.category.toLowerCase() === category.toLowerCase()
       );
       setFilteredProducts(filtered);
+      setSelectedCategory(category);
     }
     setCurrentPage(1); // Reset to first page after filtering
   };
@@ -118,7 +121,7 @@ const SellerProductsPage = () => {
     <div className="container mx-auto p-4 pt-8">
       <h1 className="text-2xl font-bold mb-4">Seller Products</h1>
       <SearchBar onSearch={handleSearch} />
-      <FilterCategory onFilterCategory={handleFilterCategory} />
+      <FilterCategory onSelectCategory={handleFilterCategory} selectedCategory={selectedCategory} />
       <button
         onClick={handleOpenAddProductModal}
         className="mb-4 px-4 py-2 bg-green-500 text-white rounded"

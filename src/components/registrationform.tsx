@@ -39,6 +39,7 @@ const RegistrationForm: React.FC = () => {
       try {
         // Send the data in the format the backend expects
         const response = await registerUser({
+          id: "test",
           username: values.username,
           email: values.email,
           password: values.password, // Password is sent as plain text; backend should handle hashing
@@ -49,7 +50,7 @@ const RegistrationForm: React.FC = () => {
         router.push("/login");
         // Handle successful registration (e.g., redirect to login page)
       } catch (error) {
-        console.error("Registration failed", error, response.data);
+        console.error("Registration failed", error);
         // Handle registration error (e.g., show error message)
       }
     },

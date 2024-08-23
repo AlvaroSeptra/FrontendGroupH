@@ -67,6 +67,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               <button
                 type="button"
                 disabled={disabled}
+                // @ts-ignore
                 onClick={open}
                 className="p-2 rounded-full border border-gray-300 bg-gray-200 flex items-center"
               >

@@ -1,33 +1,23 @@
 import React, { useState } from "react";
 import { updateProduct } from "@/services/api";
+import { Product } from "@/types";
 
 type SellerModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    quantity: number;
-    category: string;
-    sellerId: string;
-    image_url: string;
-  };
-  onAddToCart: (quantity: number) => void;
+  product: Product;
 };
 
 const SellerModal: React.FC<SellerModalProps> = ({
   isOpen,
   onClose,
   product,
-  onAddToCart,
 }) => {
   const [quantity, setQuantity] = useState<number>(product.quantity);
   const [name, setName] = useState<string>(product.name);
   const [price, setPrice] = useState<number>(product.price);
   const [description, setDescription] = useState<string>(product.description);
-  const [imageUrl, setImageUrl] = useState<string>(product.image_url);
+  const [imageUrl, setImageUrl] = useState<string>(product.image_url || '');
 
   if (!isOpen) return null;
 
