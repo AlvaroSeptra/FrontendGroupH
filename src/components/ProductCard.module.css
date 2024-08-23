@@ -1,45 +1,44 @@
 /* src/components/ProductCard.module.css */
 .verticalProductCard {
-    border-radius: 0.5rem;
-    position: relative;
-    background-color: #ffffff;
-  }
-  
-  .thumbnail {
-    position: relative;
-    text-align: center;
-  }
-  
-  .featureImg {
-    max-width: 100%;
-    height: auto;
-  }
-  
-  .productBtns {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    top: 10px;
-    right: 10px;
-  }
-  
-  .offerBadge {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: #dc3545;
-  }
-  
-  .cardContent {
-    padding: 1rem;
-  }
-  
-  .price {
-    color: #dc3545;
-  }
-  
-  .price del {
-    margin-right: 0.5rem;
-  }
-  
+  border-radius: 0.5rem;
+  position: relative;
+  background-color: #ffffff;
+}
+
+.thumbnail {
+  position: relative;
+  text-align: center;
+}
+
+.featureImg {
+  max-width: 100%;
+  height: auto;
+}
+
+.productBtns {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  top: 10px;
+  right: 10px;
+}
+
+.offerBadge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #dc3545;
+}
+
+.cardContent {
+  padding: 1rem;
+}
+
+.price {
+  color: #dc3545;
+}
+
+.price del {
+  margin-right: 0.5rem;
+}

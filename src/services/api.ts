@@ -102,7 +102,7 @@ export const fetchOrders = (customerId: number) => {
 
 // Fetch all products by seller (requires JWT)
 export const fetchProductsBySeller = () => {
-  return api.get("/products/seller");
+  return api.get<Product[]>("/products/seller");
 };
 
 // Add new product

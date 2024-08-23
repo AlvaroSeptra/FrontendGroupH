@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import ProductModal from './ProductModal';
-import styles from './ProductCard.module.css';
-import { useCart } from './CartContext';
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import ProductModal from "./ProductModal";
+import styles from "./ProductCard.module.css";
+import { useCart } from "./CartContext";
 
 interface ProductCardProps {
   product: {
@@ -13,7 +13,7 @@ interface ProductCardProps {
     name: string;
     rating?: number;
     price: number;
-  }
+  };
   oldPrice?: string;
   discount?: string;
   onAddToCart?: () => void;
@@ -28,7 +28,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
-    console.log("Card clicked!");  // Debugging log
+    console.log("Card clicked!"); // Debugging log
     setIsModalOpen(true);
   };
 
@@ -46,7 +46,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           onClick={handleCardClick}
         >
           {discount && (
-            <span className={`${styles.offerBadge} text-white fw-bold fs-xxs position-absolute start-0 top-0`}>
+            <span
+              className={`${styles.offerBadge} text-white fw-bold fs-xxs position-absolute start-0 top-0`}
+            >
               {discount}
             </span>
           )}
@@ -60,10 +62,17 @@ const ProductCard: React.FC<ProductCardProps> = ({
             />
           </div>
           <div className={styles.cardContent}>
-            <Link href={`/product-category/${product.category}`} className="mb-2 d-inline-block text-secondary fw-semibold fs-xxs">
+            <Link
+              href={`/product-category/${product.category}`}
+              className="mb-2 d-inline-block text-secondary fw-semibold fs-xxs"
+            >
               {product.category}
             </Link>
-            <Link href={`/product/${product.id}`} className="card-title fw-bold d-block mb-2" title={product.name}>
+            <Link
+              href={`/product/${product.id}`}
+              className="card-title fw-bold d-block mb-2"
+              title={product.name}
+            >
               {product.name}
             </Link>
             <div className="product-rating d-flex align-items-center flex-nowrap fs-xxs mb-2">
@@ -76,15 +85,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </div>
             </div>
             <h6 className={styles.price}>
-              {oldPrice && <del aria-hidden="true"><span>${oldPrice}</span></del>}
-              <ins><span>${product.price}</span></ins>
+              {oldPrice && (
+                <del aria-hidden="true">
+                  <span>${oldPrice}</span>
+                </del>
+              )}
+              <ins>
+                <span>${product.price}</span>
+              </ins>
             </h6>
             <button
               className="btn btn-outline-secondary btn-md"
               onClick={(e) => {
-                e.stopPropagation();  // Prevent button click from triggering card click
+                e.stopPropagation(); // Prevent button click from triggering card click
                 cart.addToCart(product);
-                console.log('OK', cart)
+                console.log("OK", cart);
               }}
             >
               Add to cart
@@ -109,7 +124,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           }}
           onAddToCart={(quantity) => {
             closeModal();
-            cart.addToCart(product)
+            cart.addToCart(product);
           }}
         />
       )}

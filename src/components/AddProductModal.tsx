@@ -7,7 +7,7 @@ interface AddProductModalProps {
   onAddProduct: (product: {
     name: string;
     description: string;
-    price: number; // Changed from number to string
+    price: number;
     category: string;
     quantity: number;
     image_url: string;
@@ -22,13 +22,21 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(""); // Changed to string
+  const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
 
-  const userId = localStorage.getItem("id"); // Retrieve userId from local storage
+  const [errors, setErrors] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    quantity: "",
+  });
+
+  const userId = localStorage.getItem("id");
 
   if (!isOpen || !userId) return null;
 
@@ -38,7 +46,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     formData.append("upload_preset", "your-cloudinary-preset"); // Replace with your Cloudinary preset
 
     try {
-      const response = await axios.post("your-cloudinary-url", formData); // Replace with your Cloudinary URL
+      const response = await axios.post(
+        `https://api.cloudinary.com/v1_1/your-cloud-name/image/upload`, // Replace with your Cloudinary URL
+        formData
+      );
       setImageUrl(response.data.secure_url);
     } catch (error) {
       console.error("Image upload failed", error);
@@ -53,18 +64,43 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     }
   };
 
+  const validateForm = () => {
+    const newErrors: any = {};
+    const nameWords = name.trim().split(/\s+/);
+    const descriptionWords = description.trim().split(/\s+/);
+
+    if (!name) newErrors.name = "Name is required";
+    else if (nameWords.length < 5)
+      newErrors.name = "Name must be at least 5 words";
+
+    if (!description) newErrors.description = "Description is required";
+    else if (descriptionWords.length < 5)
+      newErrors.description = "Description must be at least 5 words";
+
+    if (!price || isNaN(Number(price)))
+      newErrors.price = "Price is required and must be a number";
+
+    if (!category) newErrors.category = "Category is required";
+
+    if (quantity <= 0) newErrors.quantity = "Quantity must be greater than 0";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = () => {
-    if (userId) {
+    if (validateForm() && userId) {
       onAddProduct({
         name,
         description,
         price: parseFloat(price),
         category,
         quantity,
-        image_url: imageUrl || "default-image-url", // Use default URL if imageUrl is empty
-        sellerId: userId, // Pass the userId as sellerId
+        image_url: imageUrl || "default-image-url",
+        sellerId: userId,
       });
-      onClose(); // Close modal after submission
+      onClose();
     }
   };
 
@@ -87,6 +123,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         </button>
         <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
         <form>
+          {/* Name Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -95,7 +132,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               onChange={(e) => setName(e.target.value)}
               className="w-full border border-gray-300 rounded p-2"
             />
+            {errors.name && (
+              <p className="text-red-600 text-sm">{errors.name}</p>
+            )}
           </div>
+
+          {/* Description Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">
               Description
@@ -105,34 +147,60 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               onChange={(e) => setDescription(e.target.value)}
               className="w-full border border-gray-300 rounded p-2"
             />
+            {errors.description && (
+              <p className="text-red-600 text-sm">{errors.description}</p>
+            )}
           </div>
+
+          {/* Price Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Price</label>
             <input
-              type="text"
+              type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className="w-full border border-gray-300 rounded p-2"
+              min="0"
+              step="0.01"
             />
+            {errors.price && (
+              <p className="text-red-600 text-sm">{errors.price}</p>
+            )}
           </div>
+
+          {/* Category Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Category</label>
-            <input
-              type="text"
+            <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="w-full border border-gray-300 rounded p-2"
-            />
+            >
+              <option value="">Select a category</option>
+              <option value="eco-friendly">Eco-Friendly</option>
+              <option value="organic">Organic</option>
+            </select>
+            {errors.category && (
+              <p className="text-red-600 text-sm">{errors.category}</p>
+            )}
           </div>
+
+          {/* Quantity Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Quantity</label>
             <input
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
+              onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
               className="w-full border border-gray-300 rounded p-2"
+              min="1"
             />
+            {errors.quantity && (
+              <p className="text-red-600 text-sm">{errors.quantity}</p>
+            )}
           </div>
+
+          {/* Image Upload Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Image</label>
             <input
@@ -149,6 +217,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               />
             )}
           </div>
+
           <button
             type="button"
             onClick={handleSubmit}

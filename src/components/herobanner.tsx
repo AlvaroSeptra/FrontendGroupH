@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/autoplay";  // Import Autoplay CSS
+import "swiper/css/autoplay"; // Import Autoplay CSS
 import { FaStar } from "react-icons/fa";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
@@ -61,7 +61,7 @@ const HeroBanner = () => {
           </p>
           <div className="mt-12">
             <a
-              href="/products"  // Mengarahkan ke halaman produk
+              href="/products" // Mengarahkan ke halaman produk
               className="inline-flex items-center px-6 py-3 text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition duration-300"
             >
               <span className="mr-2">Shop Now</span>

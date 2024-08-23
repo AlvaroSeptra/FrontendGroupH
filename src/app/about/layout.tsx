@@ -5,9 +5,7 @@ const AboutLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        {children}
-      </div>
+      <div className="container mx-auto px-4 py-8">{children}</div>
     </>
   );
 };
