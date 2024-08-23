@@ -15,9 +15,6 @@ const CartPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const cartData = localStorage.getItem("cart");
-  const parsedCartData = JSON.parse(cartData || "{}");
-  console.log(cartData);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,7 +30,11 @@ const CartPage = () => {
     };
 
     fetchProducts();
-    setCart(parsedCartData);
+    if (typeof window !== "undefined") {
+      const cartData = localStorage.getItem("cart");
+      const parsedCartData = JSON.parse(cartData || "{}");
+      setCart(parsedCartData);
+    }
   }, []);
 
   const handleAddToCart = (product: any, quantity: number = 1) => {

@@ -1,16 +1,8 @@
 import React from "react";
+import { Product } from "@/types"; 
 
 type ProductCardProps = {
-  product: {
-    id: string;
-    name: string;
-    description: string;
-    price: number | undefined; // Allow undefined for type safety
-    image_url: string; // Only using image_url
-    quantity: number;
-    category: string;
-    sellerId: string;
-  };
+  product: Product;
   onClick: () => void;
 };
 
