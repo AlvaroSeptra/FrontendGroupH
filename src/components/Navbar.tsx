@@ -1,16 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const disableNavbar =
     pathname.includes("/register") || pathname.includes("/login");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (token) {
+      setIsAuthenticated(true);
+      if (role === "seller") {
+        setIsSeller(true);
+      }
+    } else {
+      setIsAuthenticated(false);
+      setIsSeller(false);
+    }
+  }, [pathname]);
 
   if (disableNavbar) return null;
 
@@ -25,6 +42,14 @@ const Navbar = () => {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setIsAuthenticated(false);
+    setIsSeller(false);
+    router.push("/");
   };
 
   return (
@@ -93,22 +118,48 @@ const Navbar = () => {
           >
             Profile
           </Link>
-          <Link
-            href="/login"
-            className={`${
-              pathname === "/login"
-                ? "text-green-500 font-bold"
-                : "text-white hover:text-green-300"
-            }`}
-          >
-            Login
-          </Link>
-          <button
-            className={`border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ${getButtonSizeClasses()}`}
-            onClick={() => router.push("/register")}
-          >
-            Register Now
-          </button>
+          {isAuthenticated && (
+            <>
+              {isSeller && (
+                <Link
+                  href="/seller"
+                  className={`${
+                    pathname === "/seller"
+                      ? "text-green-500 font-bold"
+                      : "text-white hover:text-green-300"
+                  }`}
+                >
+                  Seller
+                </Link>
+              )}
+              <button
+                className={`border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ${getButtonSizeClasses()}`}
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {!isAuthenticated && (
+            <>
+              <Link
+                href="/login"
+                className={`${
+                  pathname === "/login"
+                    ? "text-green-500 font-bold"
+                    : "text-white hover:text-green-300"
+                }`}
+              >
+                Login
+              </Link>
+              <button
+                className={`border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ${getButtonSizeClasses()}`}
+                onClick={() => router.push("/register")}
+              >
+                Register Now
+              </button>
+            </>
+          )}
         </div>
         <button
           className="md:hidden text-white"
@@ -175,26 +226,56 @@ const Navbar = () => {
           >
             Profile
           </Link>
-          <Link
-            href="/login"
-            className={`block py-2 px-4 ${
-              pathname === "/login"
-                ? "text-green-500 font-bold"
-                : "text-white hover:bg-green-700"
-            }`}
-            onClick={toggleMenu}
-          >
-            Login
-          </Link>
-          <button
-            className={`block py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ${getButtonSizeClasses()}`}
-            onClick={() => {
-              router.push("/register");
-              toggleMenu(); // Close menu after navigating
-            }}
-          >
-            Register Now
-          </button>
+          {isAuthenticated && (
+            <>
+              {isSeller && (
+                <Link
+                  href="/seller-dashboard"
+                  className={`block py-2 px-4 ${
+                    pathname === "/seller-dashboard"
+                      ? "text-green-500 font-bold"
+                      : "text-white hover:bg-green-700"
+                  }`}
+                  onClick={toggleMenu}
+                >
+                  Seller Dashboard
+                </Link>
+              )}
+              <button
+                className="block py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
+                onClick={() => {
+                  handleLogout();
+                  toggleMenu(); // Close menu after navigating
+                }}
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {!isAuthenticated && (
+            <>
+              <Link
+                href="/login"
+                className={`block py-2 px-4 ${
+                  pathname === "/login"
+                    ? "text-green-500 font-bold"
+                    : "text-white hover:bg-green-700"
+                }`}
+                onClick={toggleMenu}
+              >
+                Login
+              </Link>
+              <button
+                className={`block py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 ${getButtonSizeClasses()}`}
+                onClick={() => {
+                  router.push("/register");
+                  toggleMenu(); // Close menu after navigating
+                }}
+              >
+                Register Now
+              </button>
+            </>
+          )}
         </div>
       )}
     </nav>
