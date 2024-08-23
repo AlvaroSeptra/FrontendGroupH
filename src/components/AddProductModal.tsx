@@ -26,6 +26,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [manualImageUrl, setManualImageUrl] = useState<string>("");
 
   const [errors, setErrors] = useState({
     name: "",
@@ -66,7 +67,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         price: parseFloat(price),
         category,
         quantity,
-        image_url: imageUrl || "default-image-url",
+        image_url: manualImageUrl || imageUrl || "default-image-url",
         sellerId: userId,
       });
       onClose();
@@ -138,7 +139,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               className="w-full border border-gray-300 rounded p-2"
             >
               <option value="">Select a category</option>
-              <option value="eco-friendly">Eco-Friendly</option>
+              <option value="ecofriendly">Eco-Friendly</option>
               <option value="organic">Organic</option>
             </select>
             {errors.category && (
@@ -160,6 +161,16 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
           </div>
 
           <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">
+              Image URL (Optional)
+            </label>
+            <input
+              type="text"
+              value={manualImageUrl}
+              onChange={(e) => setManualImageUrl(e.target.value)}
+              placeholder="Enter image URL"
+              className="w-full border border-gray-300 rounded p-2 mb-2"
+            />
             <ImageUpload
               value={imageUrl ? [imageUrl] : []}
               onChange={(url) => setImageUrl(url)}
