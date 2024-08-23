@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import ProductModal from "./ProductModal";
-import styles from "./ProductCard.module.css";
-import { useCart } from "./CartContext";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import ProductModal from './ProductModal';
+import styles from './ProductCard.module.css';
+import { useCart } from './CartContext';
 
 interface ProductCardProps {
   product: {
@@ -28,7 +28,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
-    console.log("Card clicked!"); // Debugging log
     setIsModalOpen(true);
   };
 
@@ -42,64 +41,40 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <>
       <div className="col-lg-4 col-sm-6">
         <div
-          className={`${styles.verticalProductCard} rounded-2 position-relative border-0 bg-white`}
+          className={`${styles.verticalProductCard} rounded-2 position-relative`}
           onClick={handleCardClick}
         >
           {discount && (
-            <span
-              className={`${styles.offerBadge} text-white fw-bold fs-xxs position-absolute start-0 top-0`}
-            >
+            <span className={`${styles.offerBadge} text-white fw-bold`}>
               {discount}
             </span>
           )}
-          <div className={`${styles.thumbnail} position-relative text-center`}>
+          <div className={styles.thumbnail}>
             <Image
               src={product.image}
               alt={product.name}
+              layout="responsive"
               width={550}
               height={400}
-              className={`${styles.featureImg} img-fluid wp-post-image`}
+              className={styles.featureImg}
             />
           </div>
           <div className={styles.cardContent}>
-            <Link
-              href={`/product-category/${product.category}`}
-              className="mb-2 d-inline-block text-secondary fw-semibold fs-xxs"
-            >
+            <Link href={`/product-category/${product.category}`} className="d-inline-block text-secondary mb-2">
               {product.category}
             </Link>
-            <Link
-              href={`/product/${product.id}`}
-              className="card-title fw-bold d-block mb-2"
-              title={product.name}
-            >
+            <Link href={`/product/${product.id}`} className={styles.productName}>
               {product.name}
             </Link>
-            <div className="product-rating d-flex align-items-center flex-nowrap fs-xxs mb-2">
-              <div className="ratting d-flex align-items-center">
-                {/* <div className="star-rating" role="img" aria-label={`Rated ${rating} out of 5`}>
-                  <span style={{ width: `${(rating / 5) * 100}%` }}>
-                    Rated <strong className="rating">{rating}</strong> out of 5
-                  </span>
-                </div> */}
-              </div>
-            </div>
             <h6 className={styles.price}>
-              {oldPrice && (
-                <del aria-hidden="true">
-                  <span>${oldPrice}</span>
-                </del>
-              )}
-              <ins>
-                <span>${product.price}</span>
-              </ins>
+              {oldPrice && <del className={styles.oldPrice}>${oldPrice}</del>}
+              <ins className={styles.newPrice}>${product.price}</ins>
             </h6>
             <button
-              className="btn btn-outline-secondary btn-md"
+              className={styles.addToCartButton}
               onClick={(e) => {
-                e.stopPropagation(); // Prevent button click from triggering card click
+                e.stopPropagation();  // Prevent button click from triggering card click
                 cart.addToCart(product);
-                console.log("OK", cart);
               }}
             >
               Add to cart
