@@ -13,7 +13,7 @@ export const loginUser = (username: string, password: string) => {
 };
 
 // Fungsi Registrasi
-export const registerUser = (user: Partial<User>) => {
+export const registerUser = (user: User) => {
   return api.post("/register", user);
 };
 

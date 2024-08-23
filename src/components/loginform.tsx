@@ -5,23 +5,35 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { loginUser } from "@/services/api";
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().required("Please enter your username"),
+  email: Yup.string().required("Please enter your email"),
   password: Yup.string()
-    .min(8, "Your password is too weak, please enter a stronger password")
+    .min(2, "Your password is too weak, please enter a stronger password")
     .required("Please enter your password"),
 });
 
 const LoginForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleLogin = async (values: { email: string; password: string }) => {
+    try {
+      const response = await loginUser(values.email, values.password);
+      // Handle successful login (e.g., save token, redirect)
+      localStorage.setItem("token", response.data.token); // Save token to localStorage
+      console.log("Login successful");
+    } catch (error) {
+      // Handle login error (e.g., show error message)
+    }
+  };
+
   return (
     <Formik
-      initialValues={{ username: "", password: "" }}
+      initialValues={{ email: "", password: "" }}
       validationSchema={LoginSchema}
       onSubmit={(values) => {
-        console.log(values);
+        handleLogin(values);
       }}
     >
       {() => (
@@ -31,7 +43,7 @@ const LoginForm: React.FC = () => {
               htmlFor="username"
               className="block text-sm font-medium text-gray-700"
             >
-              Username
+              Email
             </label>
             <div className="relative">
               <Field
@@ -41,7 +53,7 @@ const LoginForm: React.FC = () => {
                 placeholder="Enter your username"
               />
               <ErrorMessage
-                name="username"
+                name="email"
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
@@ -86,7 +98,7 @@ const LoginForm: React.FC = () => {
           </button>
           <div className="text-center text-sm text-gray-500">
             <Link href="/register" className="hover:underline">
-              don't have an account?
+              Don't have an account?
             </Link>
             <span className="mx-2 underline">|</span>
             <Link href="/" className="hover:underline">

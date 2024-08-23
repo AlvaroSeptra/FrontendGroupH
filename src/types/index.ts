@@ -1,12 +1,11 @@
 // src/types/index.ts
 
 export interface User {
-  userId: number;
   username: string;
   email: string;
   password: string;
   location: string;
-  userType: "CUSTOMER" | "SELLER";
+  role: "customer" | "seller";
 }
 
 export interface Product {

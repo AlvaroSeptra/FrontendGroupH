@@ -3,52 +3,61 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Link from "next/link";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-interface User {
-  userId: number;
-  username: string;
-  password: string;
-  email: string;
-  location: string;
-  userType: "CUSTOMER" | "SELLER";
-}
+import { registerUser } from "@/services/api";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const RegistrationForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
-  const formik = useFormik<User>({
+  const formik = useFormik({
     initialValues: {
-      userId: 0,
       username: "",
-      password: "",
       email: "",
+      password: "",
       location: "",
-      userType: "CUSTOMER",
+      role: "customer", // Default userType
     },
     validationSchema: Yup.object({
       username: Yup.string()
         .min(3, "Username must be at least 3 characters")
         .required("Username is required"),
-      password: Yup.string()
-        .min(8, "Password must be at least 8 characters")
-        .required("Password is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
+      password: Yup.string()
+        .min(5, "Password must be at least 8 characters")
+        .required("Password is required"),
       location: Yup.string().required("Location is required"),
-      userType: Yup.string()
-        .oneOf(["CUSTOMER", "SELLER"], "Invalid user type")
+      role: Yup.string()
+        .oneOf(["customer", "seller"], "Invalid user type")
         .required("User type is required"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values) => {
+      try {
+        // Send the data in the format the backend expects
+        const response = await registerUser({
+          username: values.username,
+          email: values.email,
+          password: values.password, // Password is sent as plain text; backend should handle hashing
+          location: values.location,
+          role: values.role as "customer" | "seller", // Ensure the role is mapped to userType
+        });
+        console.log("Registration successful", response.data);
+        router.push("/login");
+        // Handle successful registration (e.g., redirect to login page)
+      } catch (error) {
+        console.error("Registration failed", error, response.data);
+        // Handle registration error (e.g., show error message)
+      }
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-6">
+      {/* Username */}
       <div>
         <label
           htmlFor="username"
@@ -63,7 +72,7 @@ const RegistrationForm: React.FC = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.username}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         {formik.touched.username && formik.errors.username ? (
           <div className="text-red-500 text-sm mt-1">
@@ -72,35 +81,7 @@ const RegistrationForm: React.FC = () => {
         ) : null}
       </div>
 
-      <div className="relative">
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type={showPassword ? "text" : "password"}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.password}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
-        />
-        <span
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-        >
-          {showPassword ? <FaEyeSlash /> : <FaEye />}
-        </span>
-        {formik.touched.password && formik.errors.password ? (
-          <div className="text-red-500 text-sm mt-1">
-            {formik.errors.password}
-          </div>
-        ) : null}
-      </div>
-
+      {/* Email */}
       <div>
         <label
           htmlFor="email"
@@ -115,13 +96,56 @@ const RegistrationForm: React.FC = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.email}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         {formik.touched.email && formik.errors.email ? (
           <div className="text-red-500 text-sm mt-1">{formik.errors.email}</div>
         ) : null}
       </div>
 
+      {/* Password */}
+      <div className="relative">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type={showPassword ? "text" : "password"}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.password}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+
+        <div
+          className="absolute inset-y-0 right-0 flex items-center px-3 cursor-pointer"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? (
+            <FaEyeSlash className="text-gray-500" />
+          ) : (
+            <FaEye className="text-gray-500" />
+          )}
+        </div>
+        {/* <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute inset-y-0 right-0 px-3 py-1"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button> */}
+        {formik.touched.password && formik.errors.password ? (
+          <div className="text-red-500 text-sm mt-1">
+            {formik.errors.password}
+          </div>
+        ) : null}
+      </div>
+
+      {/* Location */}
       <div>
         <label
           htmlFor="location"
@@ -136,7 +160,7 @@ const RegistrationForm: React.FC = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.location}
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
         {formik.touched.location && formik.errors.location ? (
           <div className="text-red-500 text-sm mt-1">
@@ -145,39 +169,38 @@ const RegistrationForm: React.FC = () => {
         ) : null}
       </div>
 
+      {/* Role */}
       <div>
         <label
-          htmlFor="userType"
+          htmlFor="role"
           className="block text-sm font-medium text-gray-700"
         >
-          User Type
+          Role
         </label>
         <select
-          id="userType"
-          name="userType"
+          id="role"
+          name="role"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          value={formik.values.userType}
+          value={formik.values.role}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         >
-          <option value="CUSTOMER">Customer</option>
-          <option value="SELLER">Seller</option>
+          <option value="customer">Customer</option>
+          <option value="seller">Seller</option>
         </select>
-        {formik.touched.userType && formik.errors.userType ? (
-          <div className="text-red-500 text-sm mt-1">
-            {formik.errors.userType}
-          </div>
+        {formik.touched.role && formik.errors.role ? (
+          <div className="text-red-500 text-sm mt-1">{formik.errors.role}</div>
         ) : null}
       </div>
 
-      <div className="mt-6">
-        <button
-          type="submit"
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Register
-        </button>
-      </div>
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full py-2 px-4 bg-green-600 text-white font-semibold rounded-md shadow-sm hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+      >
+        Register
+      </button>
+
       <div className="mt-4">
         <div className="text-center text-sm text-gray-500">
           <Link href="/login" className="hover:underline">
