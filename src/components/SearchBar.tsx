@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import debounce from "lodash.debounce";
+import { debounce } from "lodash";
 
 interface SearchBarProps {
   onSearch: (term: string) => void;
