@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import ImageUpload from "./ImageUpload";
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -25,8 +25,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [image, setImage] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const [errors, setErrors] = useState({
     name: "",
@@ -39,30 +38,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   const userId = localStorage.getItem("id");
 
   if (!isOpen || !userId) return null;
-
-  const handleImageUpload = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "your-cloudinary-preset"); // Replace with your Cloudinary preset
-
-    try {
-      const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/your-cloud-name/image/upload`, // Replace with your Cloudinary URL
-        formData
-      );
-      setImageUrl(response.data.secure_url);
-    } catch (error) {
-      console.error("Image upload failed", error);
-    }
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      handleImageUpload(file);
-    }
-  };
 
   const validateForm = () => {
     const newErrors: any = {};
@@ -123,7 +98,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         </button>
         <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
         <form>
-          {/* Name Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -136,8 +110,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               <p className="text-red-600 text-sm">{errors.name}</p>
             )}
           </div>
-
-          {/* Description Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">
               Description
@@ -151,8 +123,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               <p className="text-red-600 text-sm">{errors.description}</p>
             )}
           </div>
-
-          {/* Price Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Price</label>
             <input
@@ -161,14 +131,11 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               onChange={(e) => setPrice(e.target.value)}
               className="w-full border border-gray-300 rounded p-2"
               min="0"
-              step="0.01"
             />
             {errors.price && (
               <p className="text-red-600 text-sm">{errors.price}</p>
             )}
           </div>
-
-          {/* Category Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Category</label>
             <select
@@ -177,15 +144,13 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               className="w-full border border-gray-300 rounded p-2"
             >
               <option value="">Select a category</option>
-              <option value="eco-friendly">ecofriendly</option>
-              <option value="organic">organic</option>
+              <option value="eco-friendly">Eco-Friendly</option>
+              <option value="organic">Organic</option>
             </select>
             {errors.category && (
               <p className="text-red-600 text-sm">{errors.category}</p>
             )}
           </div>
-
-          {/* Quantity Field */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Quantity</label>
             <input
@@ -200,22 +165,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             )}
           </div>
 
-          {/* Image Upload Field */}
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full border border-gray-300 rounded p-2"
+            <ImageUpload
+              value={imageUrl ? [imageUrl] : []}
+              onChange={(url) => setImageUrl(url)}
+              onRemove={() => setImageUrl("")}
             />
-            {imageUrl && (
-              <img
-                src={imageUrl}
-                alt="Uploaded preview"
-                className="mt-4 w-full h-32 object-cover rounded"
-              />
-            )}
           </div>
 
           <button

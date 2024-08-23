@@ -11,15 +11,10 @@ type ProductCardProps = {
     category: string;
     sellerId: string;
   };
-  onAddToCart: () => void;
   onClick: () => void;
 };
 
-const SellerCard: React.FC<ProductCardProps> = ({
-  product,
-  onAddToCart,
-  onClick,
-}) => {
+const SellerCard: React.FC<ProductCardProps> = ({ product, onClick }) => {
   return (
     <div
       className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
@@ -43,15 +38,9 @@ const SellerCard: React.FC<ProductCardProps> = ({
         <p className="text-sm mb-2">
           Quantity: {product.quantity} {/* Display the quantity */}
         </p>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddToCart();
-          }}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Add to Cart
-        </button>
+        <p className="text-sm text-gray-500">
+          Category: {product.category} {/* Display the category */}
+        </p>
       </div>
     </div>
   );

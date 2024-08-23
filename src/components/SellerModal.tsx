@@ -1,5 +1,5 @@
-// components/SellerModal.tsx
-import React from "react";
+import React, { useState } from "react";
+import { updateProduct } from "@/services/api";
 
 type SellerModalProps = {
   isOpen: boolean;
@@ -12,7 +12,7 @@ type SellerModalProps = {
     quantity: number;
     category: string;
     sellerId: string;
-    image_url: string; // Updated to match backend field
+    image_url: string;
   };
   onAddToCart: (quantity: number) => void;
 };
@@ -23,9 +23,29 @@ const SellerModal: React.FC<SellerModalProps> = ({
   product,
   onAddToCart,
 }) => {
-  const [quantity, setQuantity] = React.useState(1);
+  const [quantity, setQuantity] = useState<number>(product.quantity);
+  const [name, setName] = useState<string>(product.name);
+  const [price, setPrice] = useState<number>(product.price);
+  const [description, setDescription] = useState<string>(product.description);
+  const [imageUrl, setImageUrl] = useState<string>(product.image_url);
 
   if (!isOpen) return null;
+
+  const handleUpdateProduct = async () => {
+    try {
+      await updateProduct(product.id, {
+        quantity,
+        name,
+        price,
+        description,
+        image_url: imageUrl,
+      });
+      alert("Product updated successfully.");
+    } catch (error) {
+      console.error("Failed to update product:", error);
+      alert("Failed to update product.");
+    }
+  };
 
   return (
     <div
@@ -43,44 +63,78 @@ const SellerModal: React.FC<SellerModalProps> = ({
           &times;
         </button>
         <img
-          src={product.image_url} // Updated to match backend field
-          alt={product.name}
+          src={imageUrl}
+          alt={name}
           className="w-full h-48 object-cover mb-4 rounded"
         />
-        <h2 className="text-2xl font-bold mb-4">{product.name}</h2>
-        <p className="text-lg mb-4">{product.description}</p>
-        <p className="text-lg font-semibold mb-4">
-          Price: ${product.price.toFixed(2)}
-        </p>
-        <p className="text-sm mb-4">Category: {product.category}</p>
-        <p className="text-sm mb-4">Quantity: {product.quantity}</p>{" "}
-        {/* Display quantity */}
-        <div className="flex items-center mb-4">
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l"
-            onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-          >
-            -
-          </button>
+        <h2 className="text-2xl font-bold mb-4">Edit Product</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            rows={3}
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Price</label>
           <input
             type="number"
-            value={quantity}
-            min="1"
-            className="w-12 text-center border-t border-b border-gray-300"
-            readOnly
+            value={price}
+            onChange={(e) => setPrice(parseFloat(e.target.value))}
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+            min="0"
+            step="0.01"
           />
-          <button
-            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r"
-            onClick={() => setQuantity((prev) => prev + 1)}
-          >
-            +
-          </button>
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Image URL</label>
+          <input
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="flex flex-col items-center mb-4">
+          <span className="text-sm mb-2">Quantity</span>
+          <div className="flex items-center">
+            <button
+              className="px-2 py-1 bg-gray-300 text-gray-700 rounded-l text-sm"
+              onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+            >
+              -
+            </button>
+            <input
+              type="number"
+              value={quantity}
+              min="1"
+              className="w-16 text-center border-0 bg-gray-100 text-gray-700 mx-1 py-1 rounded"
+              readOnly
+            />
+            <button
+              className="px-2 py-1 bg-gray-300 text-gray-700 rounded-r text-sm"
+              onClick={() => setQuantity((prev) => prev + 1)}
+            >
+              +
+            </button>
+          </div>
         </div>
         <button
           className="w-full px-4 py-2 bg-blue-500 text-white rounded"
-          onClick={() => onAddToCart(quantity)}
+          onClick={handleUpdateProduct}
         >
-          Add to Cart
+          Update Product
         </button>
       </div>
     </div>

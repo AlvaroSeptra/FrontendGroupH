@@ -111,7 +111,7 @@ export const addProduct = (product: Omit<Product, "id">) => {
 };
 
 // Update product by ID
-export const updateProduct = (productId: number, product: Partial<Product>) => {
+export const updateProduct = (productId: string, product: Partial<Product>) => {
   return api.put(`/products/${productId}`, product);
 };
 
