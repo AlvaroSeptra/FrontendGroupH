@@ -1,76 +1,86 @@
-
-# Proyek Frontend
+# Eco Market
 
 [![Deployed on Vercel](https://vercel.com/button)](https://your-deployed-site.vercel.app)
 
-Ini adalah proyek frontend untuk aplikasi yang dibangun menggunakan Next.js, TypeScript, dan Tailwind CSS.
+This is the frontend project for Eco Market, an application built using Next.js, TypeScript, and Tailwind CSS. Our mission is to connect local farmers with consumers, offering the freshest and most sustainable organic products directly from farms to your table.
 
-## Prasyarat
+## About Us
 
-Pastikan Anda sudah menginstal hal-hal berikut di sistem Anda:
+At Eco Market, we are passionate about connecting you with the freshest and most sustainable local produce. Our platform is designed to bridge the gap between local farmers and consumers, ensuring that you have access to organic and eco-friendly products that support a sustainable lifestyle.
 
-- Node.js (v14 atau yang lebih baru)
-- npm (v6 atau yang lebih baru)
+### Experience Local Markets Like Never Before
 
-## Memulai
+Dive into a world where local cultures and traditional practices meet modern sustainability. Our platform brings you closer to the freshest produce, such as:
+- Organic Vegetables
+- Fruits
+- Meat
+- Milk & Dairy
+- Rice
+- Nuts
+- Dried Foods
 
-Ikuti langkah-langkah berikut untuk mengatur dan menjalankan proyek secara lokal:
+We are dedicated to empowering local farmers and artisans by providing them with a platform to showcase their goods. By choosing Eco Market, you are supporting the growth of local economies and contributing to a more sustainable future.
 
-### 1. Clone repositori
+## Benefits
 
-```bash
-git clone https://github.com/AlvaroSeptra/frontendgrouph.git
-```
+1. **Fresh Products**: Enjoy the freshest local products delivered straight from the market.
+2. **Support Local**: Support local farmers and artisans with every purchase you make.
+3. **Sustainable Living**: Contribute to a greener planet with eco-friendly and sustainable products.
 
-### 2. Masuk ke direktori proyek
+## Prerequisites
 
-```bash
-cd frontendgrouph
-```
+Ensure you have installed the following on your system:
+- Node.js (v14 or later)
+- npm (v6 or later)
 
-### 3. Instal dependensi
+## Getting Started
 
-```bash
-npm install
-```
+Follow these steps to set up and run the project locally:
 
-Perintah ini akan menginstal semua paket yang diperlukan yang tercantum di `package.json`.
+1. **Clone the repository**
 
-### 4. Jalankan server pengembangan
+    ```bash
+    git clone https://github.com/AlvaroSeptra/frontendgrouph.git
+    ```
 
-```bash
-npm run dev
-```
+2. **Navigate to the project directory**
 
-Perintah ini akan memulai server pengembangan Next.js. Anda sekarang dapat melihat aplikasi di browser Anda di `http://localhost:3000`.
+    ```bash
+    cd frontendgrouph
+    ```
 
-### 5. Membangun untuk Produksi
+3. **Install dependencies**
 
-Jika Anda ingin membangun proyek untuk produksi, gunakan perintah berikut:
+    ```bash
+    npm install
+    ```
 
-```bash
-npm run build
-```
+    This command will install all the necessary packages listed in `package.json`.
 
-Ini akan membuat build yang dioptimalkan dari aplikasi.
+4. **Run the development server**
 
-### 6. Menjalankan Server Produksi
+    ```bash
+    npm run dev
+    ```
 
-Setelah membangun proyek, Anda dapat memulai server produksi dengan menggunakan:
+    This command will start the Next.js development server. You can now view the application in your browser at [http://localhost:3000](http://localhost:3000).
 
-```bash
-npm start
-```
+5. **Build for production**
 
-Ini akan melayani build produksi yang dioptimalkan dari aplikasi.
+    If you want to build the project for production, use the following command:
 
-## Struktur Folder
+    ```bash
+    npm run build
+    ```
 
-Proyek ini mengikuti struktur folder tertentu untuk mengatur kode secara efektif. Berikut adalah ikhtisar singkat dari folder utama:
+    This will create an optimized build of the application.
 
-- `app/`: Berisi logika aplikasi utama dan rute.
-- `components/`: Komponen UI yang dapat digunakan kembali.
-- `services/`: Integrasi API dan layanan.
-- `types/`: Definisi tipe untuk TypeScript.
-- `public/`: Aset publik seperti gambar, ikon, dll.
+6. **Run the production server**
 
+    After building the project, you can start the production server by using:
+
+    ```bash
+    npm start
+    ```
+
+    This will serve the optimized production build of the application.
