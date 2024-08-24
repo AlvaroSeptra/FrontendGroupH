@@ -24,6 +24,7 @@ const nextConfig = {
       "www.istockphoto.com",
       "www.google.com",
       "img.pikbest.com",
+      "res.cloudinary.com",
       // Add more domains as needed
     ],
   },

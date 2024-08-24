@@ -22,27 +22,20 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
   onClose,
   onAddProduct,
 }) => {
-  const { images, addImage, removeImage } = useImageStore();
+  const { images } = useImageStore();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [manualImageUrl, setManualImageUrl] = useState<string>("");
-
-  const [errors, setErrors] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    quantity: "",
-  });
+  const [imageURL, setImageURL] = useState("");
+  const [errors, setErrors] = useState<any>({});
 
   const userId = localStorage.getItem("id");
 
   useEffect(() => {
     if (images.length > 0) {
-      setManualImageUrl(images[0]); // Set the first image URL from the Zustand store
+      setImageURL(images[0]);
     }
   }, [images]);
 
@@ -52,14 +45,10 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     const newErrors: any = {};
 
     if (!name) newErrors.name = "Name is required";
-
     if (!description) newErrors.description = "Description is required";
-
     if (!price || isNaN(Number(price)))
       newErrors.price = "Price is required and must be a number";
-
     if (!category) newErrors.category = "Category is required";
-
     if (quantity <= 0) newErrors.quantity = "Quantity must be greater than 0";
 
     setErrors(newErrors);
@@ -67,20 +56,9 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const checkImageUrl = async (url: string) => {
-    try {
-      const response = await fetch(url, { method: "HEAD" });
-      return response.ok;
-    } catch {
-      return false;
-    }
-  };
-
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (validateForm() && userId) {
-      const validImageUrl = (await checkImageUrl(manualImageUrl))
-        ? manualImageUrl
-        : images[0] || "default-image-url";
+      const validImageUrl = imageURL || images[0] || "default-image-url";
 
       onAddProduct({
         name,
@@ -114,6 +92,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
         </button>
         <h2 className="text-2xl font-bold mb-4">Add New Product</h2>
         <form>
+          {/* Form fields for product details */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
             <input
@@ -172,7 +151,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
             <input
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+              onChange={(e) => setQuantity(parseInt(e.target.value))}
               className="w-full border border-gray-300 rounded p-2"
               min="1"
             />
@@ -180,43 +159,18 @@ const AddProductModal: React.FC<AddProductModalProps> = ({
               <p className="text-red-600 text-sm">{errors.quantity}</p>
             )}
           </div>
-
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">
-              Image URL (Optional)
-            </label>
-            <input
-              type="text"
-              value={manualImageUrl}
-              onChange={(e) => setManualImageUrl(e.target.value)}
-              placeholder="Enter image URL"
-              className="w-full border border-gray-300 rounded p-2 mb-2"
-            />
-            <ImageUpload
-              value={images}
-              onChange={(url: string) => addImage(url)}
-              onRemove={(url: string) => removeImage(url)}
-            />
-
-            {/* Display the uploaded image if available */}
-            {manualImageUrl && (
-              <div className="mt-4">
-                <img
-                  src={manualImageUrl}
-                  alt="Uploaded"
-                  className="w-full h-auto object-cover"
-                />
-              </div>
-            )}
+            <ImageUpload onUpload={(url) => setImageURL(url)} />
           </div>
-
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="w-full px-4 py-2 bg-blue-500 text-white rounded"
-          >
-            Add Product
-          </button>
+          <div className="mb-4">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
+              Add Product
+            </button>
+          </div>
         </form>
       </div>
     </div>
